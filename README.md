@@ -9,7 +9,7 @@ This is the repository for the unnamed Misbits 2020 Game Project for UL Module C
 * [Atom](https://atom.io/) - Coding workspace
 
 ## Contributors
-See [who worked on the project].(https://github.com/TomC17/Misbits-2D-Game-Project/contributors)
+See [who worked on the project](https://github.com/TomC17/Misbits-2D-Game-Project/contributors).
 
 ## Acknowledgments
 * Everyone who ever worked on an Atom Plugin
