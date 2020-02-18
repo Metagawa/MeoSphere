@@ -1,2 +1,5 @@
-theme: jekyll-theme-slate
 show_downloads: true
+title: Misbits 2D Game Project
+description: Our Spring 2020 Game project
+google_analytics:
+theme: jekyll-theme-slate
