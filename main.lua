@@ -17,16 +17,16 @@ local camera = perspective.createView()
 
 
 -- forward declarations and other locals
-math.randomseed( os.time())
 local screenW, screenH, halfW = display.actualContentWidth, display.actualContentHeight, display.contentCenterX
 local tapCount = 0
 local tapSpeed = 500
 local tapTimer
-local score = 0 --Food eaten score - (tapCount * amount of food eaten)
+--Food eaten score - (tapCount * amount of food eaten)
 local scoreText
 local foodEaten = 0
+
 local foodTable = {"food1", "food2", "food3"}
-local randNum = math.random
+local randNum = math.random(1920)
 local backGroup = display.newGroup()
 local mainGroup = display.newGroup()
 local uiGroup = display.newGroup()
@@ -67,7 +67,7 @@ cat:addEventListener( "touch", cat )
 local function rotatecat()
   tapCount = tapCount + 1
   local tapText = tapCount
-  cat:applyForce(tapSpeed, -150, cat.x, cat.y)
+  cat:applyForce(tapSpeed, - 150, cat.x, cat.y)
   cat:applyAngularImpulse(500)
   tapSpeed = 500 + tapCount * 5
 end
@@ -85,6 +85,7 @@ local function updateText()
   foodText.text = "Food Consumed:  " .. foodEaten
   tapText.text = "Total taps:  " .. tapCount
   speedText.text = "Power: "..tapSpeed
+
 end
 Runtime:addEventListener( "enterFrame", updateText)
 
@@ -102,7 +103,7 @@ local foodXSpawn = 1000
 local function spawnFood( event )
   if catballX > 540 then
     local food = display.newImage( mainGroup, "food1.png", foodXSpawn, 1000 ) food:scale( 0.2, 0.2)
-    physics.addBody( food,  { radius = 30, density = 0.2, friction = 0.5, bounce = 0.5} )
+    physics.addBody( food, { radius = 30, density = 0.2, friction = 0.5, bounce = 0.5} )
     food.myName = "food"
     local food = display.newImage( mainGroup, "food2.png", foodXSpawn + 300, 1000 ) food:scale( 0.5, 0.5)
     physics.addBody( food, { radius = 70, density = 0.4, friction = 0.5, bounce = 1.5} )
@@ -113,8 +114,8 @@ local function spawnFood( event )
     foodXSpawn = foodXSpawn + 900
 
 
---secondary condition to spawn food, not needed currently, might be removed.
-  --elseif catballx == 540 then
+    --secondary condition to spawn food, not needed currently, might be removed.
+    --elseif catballx == 540 then
     --local food = display.newImage( mainGroup, "food1.png", foodXSpawn, 1000 ) food:scale( 0.2, 0.2)
     --physics.addBody( food, { radius = 30, density = 1.0, friction = 0.5, bounce = 0.5} )
     --food.myName = "food"
@@ -144,6 +145,8 @@ function onCollision( event )
   end
 end
 Runtime:addEventListener( "collision", onCollision)
+
+
 
 --adds a floor.
 local floor = display.newRect(0, 0, 500000, 50 )
