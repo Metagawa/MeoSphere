@@ -6,7 +6,7 @@
 local physics = require "physics"
 physics.start()
 physics.setGravity( 0, 9.8)
-physics.setScale( 60 )
+physics.setScale( 100 )
 physics.setDrawMode( "normal" )
 
 
@@ -102,7 +102,7 @@ local foodXSpawn = 1000
 local function spawnFood( event )
   if catballX > 540 then
     local food = display.newImage( mainGroup, "food1.png", foodXSpawn, 1000 ) food:scale( 0.2, 0.2)
-    physics.addBody( food, { radius = 30, density = 1.0, friction = 0.5, bounce = 0.5} )
+    physics.addBody( food,  { radius = 30, density = 1.0, friction = 0.5, bounce = 0.5} )
     food.myName = "food"
     local food = display.newImage( mainGroup, "food2.png", foodXSpawn + 300, 1000 ) food:scale( 0.2, 0.2)
     physics.addBody( food, { radius = 30, density = 1.0, friction = 0.5, bounce = 0.5} )
