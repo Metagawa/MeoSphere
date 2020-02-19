@@ -107,8 +107,8 @@ local function spawnFood( event )
     local food = display.newImage( mainGroup, "food2.png", foodXSpawn + 300, 1000 ) food:scale( 0.5, 0.5)
     physics.addBody( food, { radius = 70, density = 0.4, friction = 0.5, bounce = 1.5} )
     food.myName = "food"
-    local food = display.newImage( mainGroup, "food3.png", foodXSpawn + 600, 1000 ) food:scale( 0.2, 0.2)
-    physics.addBody( food, { radius = 30, density = 0.2, friction = 0.5, bounce = 0.5} )
+    local food = display.newImage( mainGroup, "food3.png", foodXSpawn + 600, 1000 ) food:scale( 1, 1)
+    physics.addBody( food, { radius = 50, density = 0.5, friction = 0.5, bounce = 0.9} )
     food.myName = "food"
     foodXSpawn = foodXSpawn + 900
 
