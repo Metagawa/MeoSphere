@@ -7,7 +7,7 @@ This is the repository for the unnamed Misbits 2020 Game Project for UL Module C
 * [Corona SDK](https://coronalabs.com/) - The engine used
 * [Photoshop](https://www.adobe.com/ie/products/photoshop.html) - Graphics tools
 * [Atom](https://atom.io/) - Coding workspace
-* [Piskel](https://www.piskelapp.com/)
+* [Piskel](https://www.piskelapp.com/) - Pixel Art tool
 
 ## Contributors
 See [who worked on the project](https://github.com/TomC17/Misbits-2D-Game-Project/contributors).
