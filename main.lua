@@ -6,7 +6,7 @@
 local physics = require "physics"
 physics.start()
 physics.setGravity( 0, 9.8)
-physics.setScale( 60 )
+physics.setScale( 80 )
 physics.setDrawMode( "normal" )
 
 
@@ -67,7 +67,7 @@ cat:addEventListener( "touch", cat )
 local function rotatecat()
   tapCount = tapCount + 1
   local tapText = tapCount
-  cat:applyForce(tapSpeed, 0, cat.x, cat.y)
+  cat:applyForce(tapSpeed, -150, cat.x, cat.y)
   cat:applyAngularImpulse(500)
   tapSpeed = 500 + tapCount * 5
 end
@@ -102,13 +102,13 @@ local foodXSpawn = 1000
 local function spawnFood( event )
   if catballX > 540 then
     local food = display.newImage( mainGroup, "food1.png", foodXSpawn, 1000 ) food:scale( 0.2, 0.2)
-    physics.addBody( food, { radius = 30, density = 1.0, friction = 0.5, bounce = 0.5} )
+    physics.addBody( food,  { radius = 30, density = 0.2, friction = 0.5, bounce = 0.5} )
     food.myName = "food"
-    local food = display.newImage( mainGroup, "food2.png", foodXSpawn + 300, 1000 ) food:scale( 0.2, 0.2)
-    physics.addBody( food, { radius = 30, density = 1.0, friction = 0.5, bounce = 0.5} )
+    local food = display.newImage( mainGroup, "food2.png", foodXSpawn + 300, 1000 ) food:scale( 0.5, 0.5)
+    physics.addBody( food, { radius = 70, density = 0.4, friction = 0.5, bounce = 1.5} )
     food.myName = "food"
     local food = display.newImage( mainGroup, "food3.png", foodXSpawn + 600, 1000 ) food:scale( 0.2, 0.2)
-    physics.addBody( food, { radius = 30, density = 1.0, friction = 0.5, bounce = 0.5} )
+    physics.addBody( food, { radius = 30, density = 0.2, friction = 0.5, bounce = 0.5} )
     food.myName = "food"
     foodXSpawn = foodXSpawn + 900
 
@@ -151,3 +151,16 @@ floor.anchorX = 0
 floor.anchorY = 1
 floor.x, floor.y = 0, 1080
 physics.addBody( floor, "static", { friction = 0.5, shape = floorShape, bounce = 0.2 } )
+
+--debug stuff
+--adds ceiling
+local wall = display.newRect(0, 0, 500000, 50 )
+physics.addBody( wall, "static", { friction = 0.5, bounce = 0.2 } )
+--adds walls
+--left wall
+local wall = display.newRect( 0, 500, 50, 500000 )
+wall.x, wall.y = 0, 1080
+physics.addBody( wall, "static", { friction = 0.5, bounce = 0.2 } )
+--right wall
+local wall = display.newRect( 1920, 0, 50, 500000 )
+physics.addBody( wall, "static", { friction = 0.5, bounce = 0.2 } )
