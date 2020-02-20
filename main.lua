@@ -8,7 +8,7 @@ physics.start()
 physics.pause()
 physics.setGravity( 0, 7.5)
 physics.setScale( 80 )
-physics.setDrawMode( "normal" )
+physics.setDrawMode( "hybrid" )
 math.randomseed(os.time( ))
 
 
