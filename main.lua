@@ -6,7 +6,7 @@
 local physics = require "physics"
 physics.start()
 physics.pause()
-physics.setGravity( 0, 9.8)
+physics.setGravity( 0, 7.5)
 physics.setScale( 80 )
 physics.setDrawMode( "hybrid" )
 math.randomseed(os.time( ))
@@ -52,7 +52,7 @@ local cat = display.newImage( mainGroup, "cat.png", 500, 500 ) cat:scale( 0.2, 0
 cat.x = display.actualContentWidth - 1500
 cat.y = display.actualContentHeight - 200
 --adds physics to Catball and gives him circle physics.
-physics.addBody( cat, { radius = 85, density = 1, friction = 0.5, bounce = 0.4} )
+physics.addBody( cat, { radius = 85, density = 1, friction = 0.5, bounce = .85} )
 cat.myName = "Catball"
 cat.linearDamping = .2
 cat.angularDamping = .2
@@ -80,7 +80,7 @@ local function rotatecat()
   local tapText = tapCount
   cat:applyForce(tapSpeed, -tapSpeed, cat.x, cat.y)
   cat:applyAngularImpulse(500)
-  tapSpeed = 500 + tapCount * 5
+  tapSpeed = 500 + tapCount * 10
 end
 Runtime:addEventListener( "tap", rotatecat)
 
@@ -127,20 +127,20 @@ local floor = display.newRect(0, 0, 500000, 50 )
 floor.anchorX = 0
 floor.anchorY = 1
 floor.x, floor.y = 0, 1080
-physics.addBody( floor, "static", { friction = 0, shape = floorShape, bounce = 0.4 } )
+physics.addBody( floor, "static", { friction = 1.5, shape = floorShape, bounce = 0.6 } )
 
 --debug stuff
 --adds ceiling
 local ceiling = display.newRect(0, - 6000, 500000, 50 )
-physics.addBody( ceiling, "static", { friction = 10, bounce = 0.4 } )
+physics.addBody( ceiling, "static", { friction = 1., bounce = 0.5 } )
 --adds walls
 --left wall
 local wall = display.newRect( 0, 500, 50, 500000 )
 wall.x, wall.y = 0, 1080
-physics.addBody( wall, "static", { friction = 10, bounce = 0.4 } )
+physics.addBody( wall, "static", { friction = 1.5, bounce = 0.5 } )
 --right wall
 local wall2 = display.newRect( 20000, 0, 50, 500000 )
-physics.addBody( wall2, "static", { friction = 10, bounce = 0.4 } )
+physics.addBody( wall2, "static", { friction = 1.5, bounce = 0.5 } )
 
 
 --------------------------------------------------------------------------------
@@ -199,3 +199,8 @@ camera.damping = 2
 camera:setFocus(cat)
 camera:track()
 uiGroup:toFront()
+
+--Ugrades Below
+--3 Different cats (Vary statistics)
+--click upgrades
+--Special food spawn (Once purchased in shop will spawn a high value food in all levels)
