@@ -9,7 +9,7 @@ settings =
 	{
 			preferenceStorage = "sqlite",
 	}}
-	window=
+	window =
 	{
 		defaultMode = "windowed",
 		defaultViewWidth = 1920,
