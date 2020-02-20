@@ -205,3 +205,6 @@ camera:track()
 uiGroup:toFront()
 
 --Ugrades Below
+--3 Different cats (Vary statistics)
+--click upgrades
+--Special food spawn (Once purchased in shop will spawn a high value food in all levels)
