@@ -8,7 +8,7 @@ physics.start()
 physics.pause()
 physics.setGravity( 0, 9.8)
 physics.setScale( 80 )
-physics.setDrawMode( "normal" )
+physics.setDrawMode( "hybrid" )
 math.randomseed(os.time( ))
 
 
@@ -103,16 +103,18 @@ function onCollision( event )
   if (event.phase == "began" ) then
     if event.object1.myName == "food" and event.object2.myName == "Catball" then
       foodEaten = foodEaten + 1
+      local CBx, CBy = event.object2:getLinearVelocity()
+      event.object2:setLinearVelocity( CBx + 150, CBy - 800)
+      event.contact.isEnabled = false
       event.object1:removeSelf()
       event.object1 = nil
-      --local CBx, CBy = event.object2:getLinearVelocity()
-      --event.object2:setLinearVelocity( CBx * 3, CBy)
     elseif event.object1.myName == "Catball" and event.object2.myName == "food" then
       foodEaten = foodEaten + 1
+      local CBx, CBy = event.object1:getLinearVelocity()
+      event.object1:setLinearVelocity( CBx + 150, CBy - 800)
+      event.contact.isEnabled = false
       event.object2:removeSelf()
       event.object2 = nil
-      --local CBx, CBy = event.object1:getLinearVelocity()
-      --event.object1:setLinearVelocity( CBx * 3, CBy)
     end
   end
 end
@@ -162,35 +164,29 @@ Runtime:addEventListener( "enterFrame", updateText)
 --------------------------------------------------------------------------------
 -- Food Spawns, very messy, needs optimizing
 --------------------------------------------------------------------------------
-local food1 = {}
-local food2 = {}
-local food3 = {}
+--foodXSpawn set to 1000 pixels
+local foodXSpawn = 1000
+--food spawned contnuosly every 300 pixels, this continues infinitely but the camera doesn't follow Catball
+local function spawnFood( event )
+  if foodXSpawn > 999 then
+    local food1 = display.newImage( mainGroup, "food1.png", foodXSpawn, 1000 ) food1:scale( 0.2, 0.2)
+    physics.addBody( food1, { radius = 30, density = 1, friction = 0.5, bounce = 2} )
+    food1.myName = "food"
+    local food2 = display.newImage( mainGroup, "food2.png", foodXSpawn + 300, 1000 ) food2:scale( 0.5, 0.5)
+    physics.addBody( food2, { radius = 70, density = 1, friction = 0.5, bounce = 2} )
+    food2.myName = "food"
+    local food3 = display.newImage( mainGroup, "food3.png", foodXSpawn + 600, 1000 ) food3:scale( 1, 1)
+    physics.addBody( food3, { radius = 50, density = 1, friction = 0.5, bounce = 2} )
+    food3.myName = "food"
+    foodXSpawn = foodXSpawn + 900
 
-for i = 1, 333 do
-  food1[i] = display.newImage( mainGroup, "food".."1"..".png" ) food1[i]:scale( 0.5, 0.5)
-  physics.addBody( food1[i], "static", { radius = 50, density = 0, friction = 0, bounce = .7} )
-  food1[i].x = 1000 + math.random(display.screenOriginX, display.contentWidth * 10)
-  food1[i].y = -10000 + math.random(display.screenOriginY, display.contentHeight * 10)
-  food1[i].myName = "food"
-
-  food2[i] = display.newImage( mainGroup, "food".."2"..".png" ) food2[i]:scale( 0.5, 0.5)
-  physics.addBody( food2[i], "static", { radius = 50, density = 0, friction = 0, bounce = .7} )
-  food2[i].x = 1000 + math.random(display.screenOriginX, display.contentWidth * 10)
-  food2[i].y = -10000 + math.random(display.screenOriginY, display.contentHeight * 10)
-  food2[i].myName = "food"
-
-  food3[i] = display.newImage( mainGroup, "food".."3"..".png" ) food3[i]:scale( 0.5, 0.5)
-  physics.addBody( food3[i], "static", { radius = 50, density = 0, friction = 0, bounce = .7} )
-  food3[i].x = 1000 + math.random(display.screenOriginX, display.contentWidth * 10)
-  food3[i].y = -10000 + math.random(display.screenOriginY, display.contentHeight * 10)
-  food3[i].myName = "food"
-
-  camera:add(food1[i], 4)
-  camera:add(food2[i], 4)
-  camera:add(food3[i], 4)
+  camera:add(food1, 4)
+  camera:add(food2, 4)
+  camera:add(food3, 4)
 
 end
-
+end
+Runtime:addEventListener( "enterFrame", spawnFood)
 --------------------------------------------------------------------------------
 -- Camera stuff
 --------------------------------------------------------------------------------
