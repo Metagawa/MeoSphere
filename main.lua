@@ -227,7 +227,7 @@ local function updateText()
   tapText.text = "Total Taps:  " .. tapCount
   speedText.text = "Power: ".. power
   distanceText.text = "Total Distance: " .. totalDistance
-  totalScore = (power - tapCount * 5) + (foodEaten * 500) + (totalDistance * 10)
+  totalScore = ((power - tapCount * 5) + (foodEaten * 500) + (totalDistance * 10) / 2)
   scoreText.text = "Score: "..totalScore
 
 end
@@ -264,7 +264,7 @@ for i = 1, 500 do
 end
 
 --------------------------------------------------------------------------------
--- Food Spawns, very messy, needs optimizing
+-- Enemy Spawns
 --------------------------------------------------------------------------------
 local enemy = {}
 
@@ -278,10 +278,16 @@ for i = 1, 1000 do
   --camera:add(enemy[i], 4)
   game:insert(enemy[i])
 end
-
-if totalDistance >= 2500 and foodEaten >= 200 then
-  --body...
+--------------------------------------------------------------------------------
+-- End Level condition and sound test
+--------------------------------------------------------------------------------
+local function audioTest()
+local finishTest = audio.loadSound("sound/correct.swf.mp3")
+  if totalDistance >= 2000 and totalScore >= 15000 then
+audio.play( finishTest )
 end
+end
+Runtime:addEventListener("enterFrame",audioTest)
 --------------------------------------------------------------------------------
 -- Camera stuff
 --------------------------------------------------------------------------------
