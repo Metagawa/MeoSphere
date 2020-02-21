@@ -1,6 +1,7 @@
 
-
+--------------------------------------------------------------------------------
 -- include Corona's "physics" library and Perspective.lua
+--------------------------------------------------------------------------------
 
 --physics stuff
 local physics = require "physics"
@@ -43,23 +44,27 @@ local function forcesByAngle(totalForce, angle) local forces = {} local radians 
 --------------------------------------------------------------------------------
 -- Build Camera
 --------------------------------------------------------------------------------
+
 local camera = perspective.createView()
+
 --Background stuff
 local background = display.newImageRect( backGroup, "background1.png", 1940, 1080 )
-background.X = display.contentCenterX
-background.Y = display.contentCenterY
-background.anchorX = 0
-background.anchorY = 0
+  background.X = display.contentCenterX
+  background.Y = display.contentCenterY
+  background.anchorX = 0
+  background.anchorY = 0
 
 --adds a circle and skins a cat onto it
 local cat = display.newImage( mainGroup, "cat.png", 500, 500 ) cat:scale( 0.2, 0.2)
-cat.x = display.actualContentWidth - 1500
-cat.y = display.actualContentHeight - 200
+  cat.x = display.actualContentWidth - 1500
+  cat.y = display.actualContentHeight - 200
+
 --adds physics to Catball and gives him circle physics.
-physics.addBody( cat, { radius = 85, density = 1, friction = 0.5, bounce = .8} )
-cat.myName = "Catball"
-cat.linearDamping = .5
-cat.angularDamping = .2
+  physics.addBody( cat, { radius = 85, density = 1, friction = 0.5, bounce = .8} )
+  cat.myName = "Catball"
+  cat.linearDamping = .5
+  cat.angularDamping = .2
+
 --makes the cat draggable, pauses physics while being dragged
 function cat:touch( event )
   if event.phase == "began" then
@@ -75,18 +80,23 @@ function cat:touch( event )
   end
   return true
 end
+
 -- add the event listener to the circle
 cat:addEventListener( "touch", cat )
+
 --tracks Catball's position at all times.
 function onEnterFrame( event )
   catballX = cat.x
   catballY = cat.y
+
   --ui calculations--
   totalDistance = math.round(catballX / 100) - 4
+
   --ui calculations end--
 end
 Runtime:addEventListener( "enterFrame", onEnterFrame)
 local enemiesDefeated = 0
+
 --this rotates the cat and shoots him to the right with increasing strength the more taps have occurred
 local function rotatecat()
   tapCount = tapCount + 1
@@ -158,7 +168,6 @@ physics.addBody( wall, "static", { friction = 1.5, bounce = 0.5 } )
 --------------------------------------------------------------------------------
 
 
-
 foodText = display.newText( uiGroup, "Power: " .. power, 1500, 80, native.systemFont, 36)
 foodText:setFillColor( 0, 0, 0 )
 tapText = display.newText( uiGroup, "Total taps:  " .. tapCount, 1500, 120, native.systemFont, 36 )
@@ -184,9 +193,12 @@ Runtime:addEventListener( "enterFrame", updateText)
 --------------------------------------------------------------------------------
 -- Food Spawns, very messy, needs optimizing
 --------------------------------------------------------------------------------
+
+
 --foodXSpawn set to 1000 pixels
 local foodXSpawn = 650
 local foodSpacer = 750
+
 --food spawned contnuosly every 300 pixels, this continues infinitely but the camera doesn't follow Catball
 local food = {}
 for i = 1, 500 do
@@ -209,9 +221,12 @@ for i = 1, 500 do
 
 end
 
+
 --------------------------------------------------------------------------------
 -- Enemy Spawns
 --------------------------------------------------------------------------------
+
+
 local enemy = {}
 
 
@@ -223,19 +238,27 @@ for i = 1, 1000 do
   enemy[i].myName = "enemy"
   camera:add(enemy[i], 4)
 end
+
+
 --------------------------------------------------------------------------------
 -- End Level condition and sound test
 --------------------------------------------------------------------------------
+
+
 local function audioTest()
+
 local finishTest = audio.loadSound("sound/correct.swf.mp3")
+
   if totalDistance >= 2000 and totalScore >= 15000 then
 audio.play( finishTest )
-end
+  end
 end
 Runtime:addEventListener("enterFrame",audioTest)
+
 --------------------------------------------------------------------------------
 -- Camera stuff
 --------------------------------------------------------------------------------
+
 camera:add(cat, 1)
 camera:add(floor, 1)
 camera:add(wall, 1)
