@@ -329,14 +329,7 @@ Runtime:addEventListener("enterFrame", audioTest)
 -- Camera stuff
 --------------------------------------------------------------------------------
 
---camera:add(cat, 1)
---camera:add(floor, 1)
---camera:add(wall, 1)
---camera:add(wall2, 1)
---camera:add(ceiling, 1)
---camera.damping = 2
---camera:setFocus(cat)
---camera:track()
+
 uiGroup:toFront()
 
 
