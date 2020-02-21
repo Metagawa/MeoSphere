@@ -1,15 +1,16 @@
 
-
+--------------------------------------------------------------------------------
 -- include Corona's "physics" library and Perspective.lua
+--------------------------------------------------------------------------------
 
 --physics stuff
 local physics = require "physics"
-physics.start()
-physics.pause()
-physics.setGravity( 0, 22)
-physics.setScale( 80 )
-physics.setDrawMode( "normal" )
-math.randomseed(os.time( ))
+  physics.start()
+  physics.pause()
+  physics.setGravity( 0, 22)
+  physics.setScale( 80 )
+  physics.setDrawMode( "normal" )
+  math.randomseed(os.time( ))
 
 
 -- forward declarations and other locals
@@ -92,6 +93,7 @@ local function moveCamera()
 end
 Runtime:addEventListener( "enterFrame", moveCamera )
 
+
 --Background stuff
 
 --local background = display.newImageRect( backGroup, "background1.png", 1940, 1080 )
@@ -112,6 +114,7 @@ physics.addBody( cat, { radius = 85, density = 1, friction = 0.5, bounce = .6} )
 cat.myName = "Catball"
 cat.linearDamping = .5
 cat.angularDamping = .2
+
 --makes the cat draggable, pauses physics while being dragged
 function cat:touch( event )
   if event.phase == "began" then
@@ -127,18 +130,23 @@ function cat:touch( event )
   end
   return true
 end
+
 -- add the event listener to the circle
-cat:addEventListener( "touch", cat )
+  cat:addEventListener( "touch", cat )
+
 --tracks Catball's position at all times.
 function onEnterFrame( event )
   catballX = cat.x
   catballY = cat.y
+
   --ui calculations--
   totalDistance = math.round(catballX / 100) - 4
+
   --ui calculations end--
 end
-Runtime:addEventListener( "enterFrame", onEnterFrame)
+  Runtime:addEventListener( "enterFrame", onEnterFrame)
 local enemiesDefeated = 0
+
 --this rotates the cat and shoots him to the right with increasing strength the more taps have occurred
 local function rotatecat()
   tapCount = tapCount + 1
@@ -153,7 +161,7 @@ Runtime:addEventListener( "tap", rotatecat)
 local function tapperCountdown( event )
   physics.start()
 end
-timer.performWithDelay( 5000, tapperCountdown)
+  timer.performWithDelay( 5000, tapperCountdown)
 
 
 --Adds collision rules to erase food when it contacts Catball, increments foodEaten by 1, intended outcome of Cat hitting food is for him to bounce off to the right at 45 degrees, it doesn't
@@ -181,7 +189,7 @@ function onCollision( event )
   end
 end
 
-Runtime:addEventListener( "collision", onCollision)
+  Runtime:addEventListener( "collision", onCollision)
 
 
 --adds a floor.
@@ -198,8 +206,8 @@ game:insert(floor)
 --adds walls
 --left wall
 local wall = display.newRect( 0, 500, 50, 500000 )
-wall.x, wall.y = 0, 1080
-physics.addBody( wall, "static", { friction = 1.5, bounce = 0.5 } )
+  wall.x, wall.y = 0, 1080
+  physics.addBody( wall, "static", { friction = 1.5, bounce = 0.5 } )
 --right wall
 --local wall2 = display.newRect( 20000, 0, 50, 500000 )
 --physics.addBody( wall2, "static", { friction = 1.5, bounce = 0.5 } )
@@ -210,17 +218,16 @@ physics.addBody( wall, "static", { friction = 1.5, bounce = 0.5 } )
 --------------------------------------------------------------------------------
 
 
-
-foodText = display.newText( uiGroup, "Power: " .. power, 1500, 80, native.systemFont, 36)
-foodText:setFillColor( 0, 0, 0 )
-tapText = display.newText( uiGroup, "Total taps:  " .. tapCount, 1500, 120, native.systemFont, 36 )
-tapText:setFillColor( 0, 0, 0 )
-speedText = display.newText( uiGroup, "Power: " .. power, 1500, 160, native.systemFont, 36)
-speedText:setFillColor( 0, 0, 0 )
-distanceText = display.newText( uiGroup, "Total Distance: " .. totalDistance - 420, 1500, 200, native.systemFont, 36)
-distanceText:setFillColor( 0, 0, 0 )
-scoreText = display.newText( uiGroup, "Score: " .. totalScore - 420, 1500, 240, native.systemFont, 36)
-scoreText:setFillColor( 0, 0, 0 )
+  foodText = display.newText( uiGroup, "Power: " .. power, 1500, 80, native.systemFont, 36)
+  foodText:setFillColor( 0, 0, 0 )
+  tapText = display.newText( uiGroup, "Total taps:  " .. tapCount, 1500, 120, native.systemFont, 36 )
+  tapText:setFillColor( 0, 0, 0 )
+  speedText = display.newText( uiGroup, "Power: " .. power, 1500, 160, native.systemFont, 36)
+  speedText:setFillColor( 0, 0, 0 )
+  distanceText = display.newText( uiGroup, "Total Distance: " .. totalDistance - 420, 1500, 200, native.systemFont, 36)
+  distanceText:setFillColor( 0, 0, 0 )
+  scoreText = display.newText( uiGroup, "Score: " .. totalScore - 420, 1500, 240, native.systemFont, 36)
+  scoreText:setFillColor( 0, 0, 0 )
 --updates ui elements
 local function updateText()
   foodText.text = "Food Consumed:  " .. foodEaten
@@ -231,14 +238,17 @@ local function updateText()
   scoreText.text = "Score: "..totalScore
 
 end
-Runtime:addEventListener( "enterFrame", updateText)
+  Runtime:addEventListener( "enterFrame", updateText)
 
 --------------------------------------------------------------------------------
 -- Food Spawns, very messy, needs optimizing
 --------------------------------------------------------------------------------
+
+
 --foodXSpawn set to 1000 pixels
 local foodXSpawn = 650
 local foodSpacer = 750
+
 --food spawned contnuosly every 300 pixels, this continues infinitely but the camera doesn't follow Catball
 local food = {}
 for i = 1, 500 do
@@ -263,9 +273,12 @@ for i = 1, 500 do
   game:insert(food3)
 end
 
+
 --------------------------------------------------------------------------------
 -- Enemy Spawns
 --------------------------------------------------------------------------------
+
+
 local enemy = {}
 
 
@@ -278,19 +291,46 @@ for i = 1, 1000 do
   --camera:add(enemy[i], 4)
   game:insert(enemy[i])
 end
+
+
 --------------------------------------------------------------------------------
 -- End Level condition and sound test
 --------------------------------------------------------------------------------
+
+
 local function audioTest()
+
 local finishTest = audio.loadSound("sound/correct.swf.mp3")
+
   if totalDistance >= 2000 and totalScore >= 15000 then
-audio.play( finishTest )
+    audio.play( finishTest )
+  end
 end
+  Runtime:addEventListener("enterFrame",audioTest)
+
+local function easterEgg()
+
+local surprise = audio.loadSound("sound/")
+
 end
-Runtime:addEventListener("enterFrame",audioTest)
+  Runtime:addEventListener("enterFrame",surprise)
+
+local function nomNom()
+
+  local heavyNom = audio.loadSound("sound/")
+
+
+end
+      Runtime:addEventListener("enterFrame",audioTest)
+
+
+--Sounds needed.
+--When food is eaten, appropriate enemy sounds, cat impact sounds,pain, end 'jingle'
+
 --------------------------------------------------------------------------------
 -- Camera stuff
 --------------------------------------------------------------------------------
+
 --camera:add(cat, 1)
 --camera:add(floor, 1)
 --camera:add(wall, 1)
@@ -300,6 +340,7 @@ Runtime:addEventListener("enterFrame",audioTest)
 --camera:setFocus(cat)
 --camera:track()
 uiGroup:toFront()
+
 
 
 --Ugrades Below
