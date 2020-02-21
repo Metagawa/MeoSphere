@@ -8,7 +8,7 @@ physics.start()
 physics.pause()
 physics.setGravity( 0, 22)
 physics.setScale( 80 )
-physics.setDrawMode( "hybrid" )
+physics.setDrawMode( "normal" )
 math.randomseed(os.time( ))
 
 
@@ -48,8 +48,8 @@ local camera = perspective.createView()
 local background = display.newImageRect( backGroup, "background1.png", 1940, 1080 )
 background.X = display.contentCenterX
 background.Y = display.contentCenterY
-background.anchorX = 0.01
-background.anchorY = 0.01
+background.anchorX = 0
+background.anchorY = 0
 
 --adds a circle and skins a cat onto it
 local cat = display.newImage( mainGroup, "cat.png", 500, 500 ) cat:scale( 0.2, 0.2)
@@ -78,11 +78,11 @@ end
 -- add the event listener to the circle
 cat:addEventListener( "touch", cat )
 --tracks Catball's position at all times.
- function onEnterFrame( event )
+function onEnterFrame( event )
   catballX = cat.x
   catballY = cat.y
   --ui calculations--
-  totalDistance = math.round(catballX/100) - 4
+  totalDistance = math.round(catballX / 100) - 4
   --ui calculations end--
 end
 Runtime:addEventListener( "enterFrame", onEnterFrame)
@@ -91,9 +91,9 @@ local enemiesDefeated = 0
 local function rotatecat()
   tapCount = tapCount + 1
   local tapText = tapCount
-  cat:applyForce(power, -power, cat.x, cat.y)
+  cat:applyForce(power, - power, cat.x, cat.y)
   cat:applyAngularImpulse(500)
-  power = power + math.round(tapCount/2 + totalDistance/1000)
+  power = power + math.round(tapCount / 2 + totalDistance / 1000)
 end
 Runtime:addEventListener( "tap", rotatecat)
 
@@ -101,7 +101,7 @@ Runtime:addEventListener( "tap", rotatecat)
 local function tapperCountdown( event )
   physics.start()
 end
-timer.performWithDelay( 3000, tapperCountdown)
+timer.performWithDelay( 5000, tapperCountdown)
 
 
 --Adds collision rules to erase food when it contacts Catball, increments foodEaten by 1, intended outcome of Cat hitting food is for him to bounce off to the right at 45 degrees, it doesn't
@@ -110,23 +110,23 @@ function onCollision( event )
 
     if event.object1.myName == "Catball" and event.object2.myName == "food" then
       foodEaten = foodEaten + 1
-      local CBx, CBy = event.object1:getLinearVelocity()
-      event.object1:setLinearVelocity( CBx + 900, CBy - 900)
+      CBx, CBy = event.object1:getLinearVelocity()
+      event.object1:setLinearVelocity( CBx + 1200, - power - 2200)
       event.contact.isEnabled = false
       power = power + 10
       event.object2:removeSelf()
       event.object2 = nil
 
-elseif event.object1.myName == "Catball" and event.object2.myName == "enemy" then
+    elseif event.object1.myName == "Catball" and event.object2.myName == "enemy" then
       enemiesDefeated = enemiesDefeated + 1
-      local CBx, CBy = event.object1:getLinearVelocity()
-      event.object1:setLinearVelocity( CBx + 2500, CBy -5000)
+      CBx, CBy = event.object1:getLinearVelocity()
+      event.object1:setLinearVelocity( CBx + 2500, CBy - 5000)
       event.contact.isEnabled = false
       power = power + 500
       event.object2:removeSelf()
       event.object2 = nil
-end
     end
+  end
 end
 
 Runtime:addEventListener( "collision", onCollision)
@@ -137,7 +137,7 @@ local floor = display.newRect(0, 0, 500000, 50 )
 floor.anchorX = 0
 floor.anchorY = 1
 floor.x, floor.y = 0, 1080
-physics.addBody( floor, "static", { friction = 2.5, shape = floorShape, bounce = 0.3 } )
+physics.addBody( floor, "static", { friction = 2.5, shape = floorShape, bounce = 00 } )
 
 --debug stuff
 --adds ceiling
@@ -175,8 +175,9 @@ local function updateText()
   tapText.text = "Total Taps:  " .. tapCount
   speedText.text = "Power: ".. power
   distanceText.text = "Total Distance: " .. totalDistance
-  totalScore = (power - tapCount*5) + (foodEaten*500) + (totalDistance * 10)
+  totalScore = (power - tapCount * 5) + (foodEaten * 500) + (totalDistance * 10)
   scoreText.text = "Score: "..totalScore
+
 end
 Runtime:addEventListener( "enterFrame", updateText)
 
@@ -184,24 +185,24 @@ Runtime:addEventListener( "enterFrame", updateText)
 -- Food Spawns, very messy, needs optimizing
 --------------------------------------------------------------------------------
 --foodXSpawn set to 1000 pixels
-local foodXSpawn = math.random(500, 1000)
+local foodXSpawn = 650
 local foodSpacer = 750
 --food spawned contnuosly every 300 pixels, this continues infinitely but the camera doesn't follow Catball
 local food = {}
-  for i = 1, 500 do
-    local food1 = display.newImage( mainGroup, "food1.png", foodXSpawn, 985 ) food1:scale( 0.3, 0.3)
-    physics.addBody( food1, "static", { radius = 65, density = 0, friction = 1, bounce = 0.5} )
-    food1.myName = "food"
-        foodXSpawn = foodXSpawn + 600
-    local food2 = display.newImage( mainGroup, "food2.png", foodXSpawn + foodSpacer + math.random(100, 1000), 960 ) food2:scale( 0.5, 0.5)
-    physics.addBody( food2, "static", { radius = 90, density = 0, friction = 1, bounce = 0.5} )
-    food2.myName = "food"
-        foodXSpawn = foodXSpawn + 600
-    local food3 = display.newImage( mainGroup, "food3.png", foodXSpawn + foodSpacer + math.random(100, 1000), 970 ) food3:scale( 1, 1)
-    physics.addBody( food3, "static", { radius = 65, density = 0, friction = 1, bounce = 0.5} )
-    food3.myName = "food"
-    foodXSpawn = foodXSpawn + foodSpacer*3
-        foodSpacer = foodSpacer*2
+for i = 1, 500 do
+  local food1 = display.newImage( mainGroup, "food1.png", foodXSpawn + foodSpacer * 1.2, 985 ) food1:scale( 0.3, 0.3)
+  physics.addBody( food1, "static", { radius = 65, density = 0, friction = 1, bounce = 0.5} )
+  food1.myName = "food"
+  foodXSpawn = foodXSpawn + 600
+  local food2 = display.newImage( mainGroup, "food2.png", foodXSpawn + foodSpacer * 1.6, 960 ) food2:scale( 0.5, 0.5)
+  physics.addBody( food2, "static", { radius = 90, density = 0, friction = 1, bounce = 0.5} )
+  food2.myName = "food"
+  foodXSpawn = foodXSpawn + 600
+  local food3 = display.newImage( mainGroup, "food3.png", foodXSpawn + foodSpacer * 1.8, 970 ) food3:scale( 1, 1)
+  physics.addBody( food3, "static", { radius = 65, density = 0, friction = 1, bounce = 0.5} )
+  food3.myName = "food"
+  foodXSpawn = foodXSpawn + foodSpacer*1.4
+  foodSpacer = foodSpacer * 1.1
   camera:add(food1, 4)
   camera:add(food2, 4)
   camera:add(food3, 4)
@@ -218,7 +219,7 @@ for i = 1, 1000 do
   enemy[i] = display.newImage( mainGroup, "enemy1.png" ) enemy[i]:scale( 0.5, 0.5)
   physics.addBody( enemy[i], "static", { radius = 50, density = 1, friction = 1, bounce = 2} )
   enemy[i].x = 5000 + math.random(display.screenOriginX, display.contentWidth * 100)
-  enemy[i].y = -7500 + math.random(display.screenOriginY, display.contentHeight * 7)
+  enemy[i].y = -8500 + math.random(display.screenOriginY, display.contentHeight * 7)
   enemy[i].myName = "enemy"
   camera:add(enemy[i], 4)
 end
@@ -238,6 +239,7 @@ camera.damping = 2
 camera:setFocus(cat)
 camera:track()
 uiGroup:toFront()
+
 
 --Ugrades Below
 --3 Different cats (Vary statistics)
