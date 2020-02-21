@@ -17,7 +17,6 @@ local screenW, screenH, halfW = display.actualContentWidth, display.actualConten
 local tapCount = 0
 local power = 0
 local tapTimer
-
 local foodEaten = 0
 local foodTable = {"food1", "food2", "food3"}
 local randNum = math.random(1920)
@@ -29,34 +28,87 @@ local catballY = 0
 local totalDistance = 0
 local totalScore = 0
 local scoreText
+display.setDefault( "background", 72,209,204 )
+display.setDefault( "textureWrapX", "repeat" )
+display.setDefault( "textureWrapY", "repeat" )
+
+local x,y = display.contentCenterX, display.contentCenterY
+local o = display.newRect( x, y, 9999999, 9999999 )
+o.fill = { type="image", filename="background1.png" }
+o.fill.scaleX = 0.00025
+o.fill.scaleY = 0.000138
 
 --------------------------------------------------------------------------------
 -- Camera stuff
 --------------------------------------------------------------------------------
 
-local require = require
+--local require = require
 
-local perspective = require("perspective")
+--local perspective = require("perspective")
 
-local function forcesByAngle(totalForce, angle) local forces = {} local radians = -math.rad(angle) forces.x = math.cos(radians) * totalForce forces.y = math.sin(radians) * totalForce return forces end
+--local function forcesByAngle(totalForce, angle) local forces = {} local radians = -math.rad(angle) forces.x = math.cos(radians) * totalForce forces.y = math.sin(radians) * totalForce return forces end
+--local camera = perspective.createView()
 
---------------------------------------------------------------------------------
--- Build Camera
---------------------------------------------------------------------------------
-local camera = perspective.createView()
+
+
+-- Create master display group (for global "camera" scrolling effect)
+local game = display.newGroup();
+game.x = 0
+game:insert( o )
+------------------------------------------------------------
+-- Sky and ground graphics
+--bgDistanceX = 1080
+--bgDistanceY = 700
+--for i = 1, 1000 do
+--  sky = display.newImage( "background1.png", bgDistanceX, 700, true )
+--  bgDistanceX = bgDistanceX + 2365
+--  game:insert( sky )
+--  sky2 = display.newImage( "background1.png", 1920, bgDistanceY, true )
+--  bgDistanceY = bgDistanceY - 2365
+--  game:insert( sky2 )
+--end
+
+
+
+local grass = display.newImage( "food2.png", 160, 440, true )
+game:insert( grass )
+
+physics.addBody( grass, "static", { friction = 0.5, bounce = 0.3 } )
+
+local grass2 = display.newImage( "food2.png", 1120, 440, true )
+game:insert( grass2 )
+
+physics.addBody( grass2, "static", { friction = 0.5, bounce = 0.3 } )
+
+local arrow = display.newImage( "food3.png", 50, 120 )
+game:insert( arrow );
+
+-- Camera follows bolder automatically
+local function moveCamera()
+  if (cat.x > 80 or cat.y > 0 )then
+    game.x = -cat.x + 250
+    game.y = -cat.y + 800
+  end
+end
+Runtime:addEventListener( "enterFrame", moveCamera )
+
 --Background stuff
-local background = display.newImageRect( backGroup, "background1.png", 1940, 1080 )
-background.X = display.contentCenterX
-background.Y = display.contentCenterY
-background.anchorX = 0
-background.anchorY = 0
+
+--local background = display.newImageRect( backGroup, "background1.png", 1940, 1080 )
+--background.X = display.contentCenterX
+--background.Y = display.contentCenterY
+--background.anchorX = 0
+--background.anchorY = 0
 
 --adds a circle and skins a cat onto it
-local cat = display.newImage( mainGroup, "cat.png", 500, 500 ) cat:scale( 0.2, 0.2)
+cat = display.newImage( mainGroup, "cat.png", 500, 500 ) cat:scale( 0.2, 0.2)
+cat.bodyType = "kinematic"
+game:insert( cat )
+
 cat.x = display.actualContentWidth - 1500
 cat.y = display.actualContentHeight - 200
 --adds physics to Catball and gives him circle physics.
-physics.addBody( cat, { radius = 85, density = 1, friction = 0.5, bounce = .8} )
+physics.addBody( cat, { radius = 85, density = 1, friction = 0.5, bounce = .6} )
 cat.myName = "Catball"
 cat.linearDamping = .5
 cat.angularDamping = .2
@@ -138,7 +190,7 @@ floor.anchorX = 0
 floor.anchorY = 1
 floor.x, floor.y = 0, 1080
 physics.addBody( floor, "static", { friction = 2.5, shape = floorShape, bounce = 00 } )
-
+game:insert(floor)
 --debug stuff
 --adds ceiling
 --local ceiling = display.newRect(0, - 6000, 500000, 50 )
@@ -201,12 +253,14 @@ for i = 1, 500 do
   local food3 = display.newImage( mainGroup, "food3.png", foodXSpawn + foodSpacer * 1.8, 970 ) food3:scale( 1, 1)
   physics.addBody( food3, "static", { radius = 65, density = 0, friction = 1, bounce = 0.5} )
   food3.myName = "food"
-  foodXSpawn = foodXSpawn + foodSpacer*1.4
+  foodXSpawn = foodXSpawn + foodSpacer * 1.4
   foodSpacer = foodSpacer * 1.1
-  camera:add(food1, 4)
-  camera:add(food2, 4)
-  camera:add(food3, 4)
-
+  --camera:add(food1, 4)
+  --camera:add(food2, 4)
+  --camera:add(food3, 4)
+  game:insert(food1)
+  game:insert(food2)
+  game:insert(food3)
 end
 
 --------------------------------------------------------------------------------
@@ -221,7 +275,8 @@ for i = 1, 1000 do
   enemy[i].x = 5000 + math.random(display.screenOriginX, display.contentWidth * 100)
   enemy[i].y = -8500 + math.random(display.screenOriginY, display.contentHeight * 7)
   enemy[i].myName = "enemy"
-  camera:add(enemy[i], 4)
+  --camera:add(enemy[i], 4)
+  game:insert(enemy[i])
 end
 
 if totalDistance >= 2500 and foodEaten >= 200 then
@@ -230,14 +285,14 @@ end
 --------------------------------------------------------------------------------
 -- Camera stuff
 --------------------------------------------------------------------------------
-camera:add(cat, 1)
-camera:add(floor, 1)
-camera:add(wall, 1)
+--camera:add(cat, 1)
+--camera:add(floor, 1)
+--camera:add(wall, 1)
 --camera:add(wall2, 1)
 --camera:add(ceiling, 1)
-camera.damping = 2
-camera:setFocus(cat)
-camera:track()
+--camera.damping = 2
+--camera:setFocus(cat)
+--camera:track()
 uiGroup:toFront()
 
 
