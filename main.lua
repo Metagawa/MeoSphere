@@ -35,7 +35,7 @@ display.setDefault( "textureWrapY", "repeat" )
 
 local x, y = display.contentCenterX, display.contentCenterY
 local o = display.newRect( x, y, 9999999, 9999999 )
-o.fill = { type = "image", filename = "background1.png" }
+o.fill = { type = "image", filename = "images/background1.png" }
 o.fill.scaleX = 0.00025
 o.fill.scaleY = 0.000138
 
@@ -61,27 +61,27 @@ game:insert( o )
 --bgDistanceX = 1080
 --bgDistanceY = 700
 --for i = 1, 1000 do
---  sky = display.newImage( "background1.png", bgDistanceX, 700, true )
+--  sky = display.newImage( "images/background1.png", bgDistanceX, 700, true )
 --  bgDistanceX = bgDistanceX + 2365
 --  game:insert( sky )
---  sky2 = display.newImage( "background1.png", 1920, bgDistanceY, true )
+--  sky2 = display.newImage( "images/background1.png", 1920, bgDistanceY, true )
 --  bgDistanceY = bgDistanceY - 2365
 --  game:insert( sky2 )
 --end
 
 
 
-local grass = display.newImage( "food2.png", 160, 440, true )
+local grass = display.newImage( "images/food2.png", 160, 440, true )
 game:insert( grass )
 
 physics.addBody( grass, "static", { friction = 0.5, bounce = 0.3 } )
 
-local grass2 = display.newImage( "food2.png", 1120, 440, true )
+local grass2 = display.newImage( "images/food2.png", 1120, 440, true )
 game:insert( grass2 )
 
 physics.addBody( grass2, "static", { friction = 0.5, bounce = 0.3 } )
 
-local arrow = display.newImage( "food3.png", 50, 120 )
+local arrow = display.newImage( "images/food3.png", 50, 120 )
 game:insert( arrow );
 
 -- Camera follows bolder automatically
@@ -96,14 +96,14 @@ Runtime:addEventListener( "enterFrame", moveCamera )
 
 --Background stuff
 
---local background = display.newImageRect( backGroup, "background1.png", 1940, 1080 )
+--local background = display.newImageRect( backGroup, "images/background1.png", 1940, 1080 )
 --background.X = display.contentCenterX
 --background.Y = display.contentCenterY
 --background.anchorX = 0
 --background.anchorY = 0
 
 --adds a circle and skins a cat onto it
-cat = display.newImage( mainGroup, "cat.png", 500, 500 ) cat:scale( 0.2, 0.2)
+cat = display.newImage( mainGroup, "images/cat.png", 500, 500 ) cat:scale( 0.2, 0.2)
 cat.bodyType = "kinematic"
 game:insert( cat )
 
@@ -252,15 +252,15 @@ local foodSpacer = 750
 --food spawned contnuosly every 300 pixels, this continues infinitely but the camera doesn't follow Catball
 local food = {}
 for i = 1, 500 do
-  local food1 = display.newImage( mainGroup, "food1.png", foodXSpawn + foodSpacer * 1.2, 985 ) food1:scale( 0.3, 0.3)
+  local food1 = display.newImage( mainGroup, "images/food1.png", foodXSpawn + foodSpacer * 1.2, 985 ) food1:scale( 0.3, 0.3)
   physics.addBody( food1, "static", { radius = 65, density = 0, friction = 1, bounce = 0.5} )
   food1.myName = "food"
   foodXSpawn = foodXSpawn + 600
-  local food2 = display.newImage( mainGroup, "food2.png", foodXSpawn + foodSpacer * 1.6, 960 ) food2:scale( 0.5, 0.5)
+  local food2 = display.newImage( mainGroup, "images/food2.png", foodXSpawn + foodSpacer * 1.6, 960 ) food2:scale( 0.5, 0.5)
   physics.addBody( food2, "static", { radius = 90, density = 0, friction = 1, bounce = 0.5} )
   food2.myName = "food"
   foodXSpawn = foodXSpawn + 600
-  local food3 = display.newImage( mainGroup, "food3.png", foodXSpawn + foodSpacer * 1.8, 970 ) food3:scale( 1, 1)
+  local food3 = display.newImage( mainGroup, "images/food3.png", foodXSpawn + foodSpacer * 1.8, 970 ) food3:scale( 1, 1)
   physics.addBody( food3, "static", { radius = 65, density = 0, friction = 1, bounce = 0.5} )
   food3.myName = "food"
   foodXSpawn = foodXSpawn + foodSpacer * 1.4
@@ -283,7 +283,7 @@ local enemy = {}
 
 
 for i = 1, 1000 do
-  enemy[i] = display.newImage( mainGroup, "enemy1.png" ) enemy[i]:scale( 0.5, 0.5)
+  enemy[i] = display.newImage( mainGroup, "images/enemy1.png" ) enemy[i]:scale( 0.5, 0.5)
   physics.addBody( enemy[i], "static", { radius = 50, density = 1, friction = 1, bounce = 2} )
   enemy[i].x = 5000 + math.random(display.screenOriginX, display.contentWidth * 100)
   enemy[i].y = -8500 + math.random(display.screenOriginY, display.contentHeight * 7)
