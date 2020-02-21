@@ -35,7 +35,7 @@ display.setDefault( "textureWrapY", "repeat" )
 
 local x, y = display.contentCenterX, display.contentCenterY
 local o = display.newRect( x, y, 9999999, 9999999 )
-o.fill = { type = "image", filename = "images/background1.png" }
+o.fill = { type = "image", filename = "images/background2.png" }
 o.fill.scaleX = 0.00025
 o.fill.scaleY = 0.000138
 
@@ -57,17 +57,15 @@ local game = display.newGroup();
 game.x = 0
 game:insert( o )
 ------------------------------------------------------------
--- Sky and ground graphics
---bgDistanceX = 1080
---bgDistanceY = 700
---for i = 1, 1000 do
---  sky = display.newImage( "images/background1.png", bgDistanceX, 700, true )
---  bgDistanceX = bgDistanceX + 2365
---  game:insert( sky )
---  sky2 = display.newImage( "images/background1.png", 1920, bgDistanceY, true )
---  bgDistanceY = bgDistanceY - 2365
---  game:insert( sky2 )
---end
+-- X-Axis looping background
+------------------------------------------------------------
+bgDistanceX = 1080
+bgDistanceY = 700
+for i = 1, 1000 do
+  sky = display.newImage( "images/background1.png", bgDistanceX, 700, true )
+  bgDistanceX = bgDistanceX + 2365
+  game:insert( sky )
+end
 
 
 
