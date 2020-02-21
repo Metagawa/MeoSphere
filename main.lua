@@ -255,6 +255,8 @@ local finishTest = audio.loadSound("sound/correct.swf.mp3")
 end
   Runtime:addEventListener("enterFrame",audioTest)
 
+--Sounds needed.
+--When food is eaten, appropriate enemy sounds, cat impact sounds,pain, end 'jingle'
 
 --------------------------------------------------------------------------------
 -- Camera stuff
