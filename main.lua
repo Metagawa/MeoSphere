@@ -255,6 +255,22 @@ local finishTest = audio.loadSound("sound/correct.swf.mp3")
 end
   Runtime:addEventListener("enterFrame",audioTest)
 
+local function easterEgg()
+
+local surprise = audio.loadSound("sound/")
+
+end
+  Runtime:addEventListener("enterFrame",surprise)
+
+local function nomNom()
+
+  local heavyNom = audio.loadSound("sound/")
+
+
+end
+      Runtime:addEventListener("enterFrame",audioTest)
+
+
 --Sounds needed.
 --When food is eaten, appropriate enemy sounds, cat impact sounds,pain, end 'jingle'
 
