@@ -175,7 +175,7 @@ local function updateText()
   tapText.text = "Total Taps:  " .. tapCount
   speedText.text = "Power: ".. power
   distanceText.text = "Total Distance: " .. totalDistance
-  totalScore = (power - tapCount * 5) + (foodEaten * 500) + (totalDistance * 10)
+  totalScore = ((power - tapCount * 5) + (foodEaten * 500) + (totalDistance * 10) / 2)
   scoreText.text = "Score: "..totalScore
 
 end
