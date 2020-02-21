@@ -5,12 +5,12 @@
 
 --physics stuff
 local physics = require "physics"
-physics.start()
-physics.pause()
-physics.setGravity( 0, 22)
-physics.setScale( 80 )
-physics.setDrawMode( "normal" )
-math.randomseed(os.time( ))
+  physics.start()
+  physics.pause()
+  physics.setGravity( 0, 22)
+  physics.setScale( 80 )
+  physics.setDrawMode( "normal" )
+  math.randomseed(os.time( ))
 
 
 -- forward declarations and other locals
@@ -82,7 +82,7 @@ function cat:touch( event )
 end
 
 -- add the event listener to the circle
-cat:addEventListener( "touch", cat )
+  cat:addEventListener( "touch", cat )
 
 --tracks Catball's position at all times.
 function onEnterFrame( event )
@@ -94,7 +94,7 @@ function onEnterFrame( event )
 
   --ui calculations end--
 end
-Runtime:addEventListener( "enterFrame", onEnterFrame)
+  Runtime:addEventListener( "enterFrame", onEnterFrame)
 local enemiesDefeated = 0
 
 --this rotates the cat and shoots him to the right with increasing strength the more taps have occurred
@@ -111,7 +111,7 @@ Runtime:addEventListener( "tap", rotatecat)
 local function tapperCountdown( event )
   physics.start()
 end
-timer.performWithDelay( 5000, tapperCountdown)
+  timer.performWithDelay( 5000, tapperCountdown)
 
 
 --Adds collision rules to erase food when it contacts Catball, increments foodEaten by 1, intended outcome of Cat hitting food is for him to bounce off to the right at 45 degrees, it doesn't
@@ -139,15 +139,15 @@ function onCollision( event )
   end
 end
 
-Runtime:addEventListener( "collision", onCollision)
+  Runtime:addEventListener( "collision", onCollision)
 
 
 --adds a floor.
 local floor = display.newRect(0, 0, 500000, 50 )
-floor.anchorX = 0
-floor.anchorY = 1
-floor.x, floor.y = 0, 1080
-physics.addBody( floor, "static", { friction = 2.5, shape = floorShape, bounce = 00 } )
+  floor.anchorX = 0
+  floor.anchorY = 1
+  floor.x, floor.y = 0, 1080
+  physics.addBody( floor, "static", { friction = 2.5, shape = floorShape, bounce = 00 } )
 
 --debug stuff
 --adds ceiling
@@ -156,8 +156,8 @@ physics.addBody( floor, "static", { friction = 2.5, shape = floorShape, bounce =
 --adds walls
 --left wall
 local wall = display.newRect( 0, 500, 50, 500000 )
-wall.x, wall.y = 0, 1080
-physics.addBody( wall, "static", { friction = 1.5, bounce = 0.5 } )
+  wall.x, wall.y = 0, 1080
+  physics.addBody( wall, "static", { friction = 1.5, bounce = 0.5 } )
 --right wall
 --local wall2 = display.newRect( 20000, 0, 50, 500000 )
 --physics.addBody( wall2, "static", { friction = 1.5, bounce = 0.5 } )
@@ -168,16 +168,16 @@ physics.addBody( wall, "static", { friction = 1.5, bounce = 0.5 } )
 --------------------------------------------------------------------------------
 
 
-foodText = display.newText( uiGroup, "Power: " .. power, 1500, 80, native.systemFont, 36)
-foodText:setFillColor( 0, 0, 0 )
-tapText = display.newText( uiGroup, "Total taps:  " .. tapCount, 1500, 120, native.systemFont, 36 )
-tapText:setFillColor( 0, 0, 0 )
-speedText = display.newText( uiGroup, "Power: " .. power, 1500, 160, native.systemFont, 36)
-speedText:setFillColor( 0, 0, 0 )
-distanceText = display.newText( uiGroup, "Total Distance: " .. totalDistance - 420, 1500, 200, native.systemFont, 36)
-distanceText:setFillColor( 0, 0, 0 )
-scoreText = display.newText( uiGroup, "Score: " .. totalScore - 420, 1500, 240, native.systemFont, 36)
-scoreText:setFillColor( 0, 0, 0 )
+  foodText = display.newText( uiGroup, "Power: " .. power, 1500, 80, native.systemFont, 36)
+  foodText:setFillColor( 0, 0, 0 )
+  tapText = display.newText( uiGroup, "Total taps:  " .. tapCount, 1500, 120, native.systemFont, 36 )
+  tapText:setFillColor( 0, 0, 0 )
+  speedText = display.newText( uiGroup, "Power: " .. power, 1500, 160, native.systemFont, 36)
+  speedText:setFillColor( 0, 0, 0 )
+  distanceText = display.newText( uiGroup, "Total Distance: " .. totalDistance - 420, 1500, 200, native.systemFont, 36)
+  distanceText:setFillColor( 0, 0, 0 )
+  scoreText = display.newText( uiGroup, "Score: " .. totalScore - 420, 1500, 240, native.systemFont, 36)
+  scoreText:setFillColor( 0, 0, 0 )
 --updates ui elements
 local function updateText()
   foodText.text = "Food Consumed:  " .. foodEaten
@@ -188,7 +188,7 @@ local function updateText()
   scoreText.text = "Score: "..totalScore
 
 end
-Runtime:addEventListener( "enterFrame", updateText)
+  Runtime:addEventListener( "enterFrame", updateText)
 
 --------------------------------------------------------------------------------
 -- Food Spawns, very messy, needs optimizing
@@ -250,24 +250,26 @@ local function audioTest()
 local finishTest = audio.loadSound("sound/correct.swf.mp3")
 
   if totalDistance >= 2000 and totalScore >= 15000 then
-audio.play( finishTest )
+    audio.play( finishTest )
   end
 end
-Runtime:addEventListener("enterFrame",audioTest)
+  Runtime:addEventListener("enterFrame",audioTest)
+
 
 --------------------------------------------------------------------------------
 -- Camera stuff
 --------------------------------------------------------------------------------
 
-camera:add(cat, 1)
-camera:add(floor, 1)
-camera:add(wall, 1)
+
+  camera:add(cat, 1)
+  camera:add(floor, 1)
+  camera:add(wall, 1)
 --camera:add(wall2, 1)
 --camera:add(ceiling, 1)
-camera.damping = 2
-camera:setFocus(cat)
-camera:track()
-uiGroup:toFront()
+  camera.damping = 2
+  camera:setFocus(cat)
+  camera:track()
+  uiGroup:toFront()
 
 
 --Ugrades Below
