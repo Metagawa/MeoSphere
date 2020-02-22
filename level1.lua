@@ -317,6 +317,7 @@ function scene:show( event )
     --prevents cat from moving before ten seconds have passed
     local function tapperCountdown( event )
       physics.start()
+        Runtime:removeEventListener( "tap", rotatecat)
     end
     timer.performWithDelay( 3000, tapperCountdown)
     Runtime:addEventListener( "collision", onCollision)
