@@ -9,7 +9,7 @@ local scene = composer.newScene()
 -- -----------------------------------------------------------------------------------
 local json = require( "json" )
 
-local scoresTable = {}
+local pointsTotal
 
 local filePath = system.pathForFile( "scores.json", system.DocumentsDirectory )
 
@@ -21,24 +21,22 @@ local function loadScores()
     if file then
         local contents = file:read( "*a" )
         io.close( file )
-        scoresTable = json.decode( contents )
+        pointsTotal = json.decode( contents )
     end
 
-    if ( scoresTable == nil or #scoresTable == 0 ) then
-        scoresTable = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+    if ( pointsTotal == nil or #pointsTotal == 0 ) then
+        pointsTotal = 0
     end
 end
 
 local function saveScores()
 
-    for i = #scoresTable, 11, -1 do
-        table.remove( scoresTable, i )
-    end
+
 
     local file = io.open( filePath, "w" )
 
     if file then
-        file:write( json.encode( scoresTable ) )
+        file:write( json.encode( pointsTotal ) )
         io.close( file )
     end
 end
@@ -56,26 +54,22 @@ function scene:create( event )
 	local sceneGroup = self.view
 	-- Code here runs when the scene is first created but has not yet appeared on screen
 loadScores()
-table.insert( scoresTable, composer.getVariable( "finalScore" ))
+table.insert( pointsTotal, composer.getVariable( "finalScore" ))
 composer.setVariable( "finalScore", 0 )
 
 local function compare( a, b )
 	return a> b
 end
-table.sort(scoresTable, compare)
+table.sort(pointsTotal, compare)
 
 saveScores()
 
-local highScoresHeader = display.newText( sceneGroup, "High Scores", display.contentCenterX, 100, native.systemFont, 44 )
+local highScoresHeader = display.newText( sceneGroup, "Points Total", display.contentCenterX, 100, native.systemFont, 44 )
 
-for i = 1, 10 do
-		if ( scoresTable[i] ) then
+for i = 1, 1 do
+		if ( pointsTotal[i] ) then
 				local yPos = 150 + ( i * 56 )
-		local rankNum = display.newText( sceneGroup, i .. ")", display.contentCenterX-50, yPos, native.systemFont, 36 )
-rankNum:setFillColor( 0.8 )
-rankNum.anchorX = 1
-
-local thisScore = display.newText( sceneGroup, scoresTable[i], display.contentCenterX-30, yPos, native.systemFont, 36 )
+local thisScore = display.newText( sceneGroup, pointsTotal[i], display.contentCenterX-30, yPos, native.systemFont, 36 )
 thisScore.anchorX = 0
 	end
 	end
