@@ -16,34 +16,36 @@ local filePath = system.pathForFile( "scores.json", system.DocumentsDirectory )
 
 local function loadScores()
 
-    local file = io.open( filePath, "r" )
+  local file = io.open( filePath, "r" )
 
-    if file then
-        local contents = file:read( "*a" )
-        io.close( file )
-        pointsTotal = json.decode( contents )
-    end
+  if file then
+    local contents = file:read( "*a" )
+    io.close( file )
+    pointsTotal = json.decode( contents )
+  end
 
-    if ( pointsTotal == nil or #pointsTotal == 0 ) then
-        pointsTotal = 0
-    end
+  if ( pointsTotal == nil or #pointsTotal == 0 ) then
+    pointsTotal = 0
+  end
 end
 
 local function saveScores()
 
 
 
-    local file = io.open( filePath, "w" )
+  local file = io.open( filePath, "w" )
 
-    if file then
-        file:write( json.encode( pointsTotal ) )
-        io.close( file )
-    end
+  if file then
+    file:write( json.encode( pointsTotal ) )
+    io.close( file )
+  end
 end
 local function gotoMenu()
-    composer.gotoScene( "menu", { time=800, effect="crossFade" } )
+  composer.gotoScene( "menu", { time = 800, effect = "crossFade" } )
 end
-
+local function gotoLS()
+  composer.gotoScene("level1")
+end
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
@@ -51,71 +53,78 @@ end
 -- create()
 function scene:create( event )
 
-	local sceneGroup = self.view
-	-- Code here runs when the scene is first created but has not yet appeared on screen
-loadScores()
-table.insert( pointsTotal, composer.getVariable( "finalScore" ))
-composer.setVariable( "finalScore", 0 )
+  local sceneGroup = self.view
+  -- Code here runs when the scene is first created but has not yet appeared on screen
 
-local function compare( a, b )
-	return a> b
-end
-table.sort(pointsTotal, compare)
+  display.setDefault( "background", 0,0,0 )
+  loadScores()
+  table.insert( pointsTotal, composer.getVariable( "finalScore" ))
+  composer.setVariable( "finalScore", 0 )
 
-saveScores()
+  local function compare( a, b )
+    return a > b
+  end
+  table.sort(pointsTotal, compare)
 
-local highScoresHeader = display.newText( sceneGroup, "Points Total", display.contentCenterX, 100, native.systemFont, 44 )
+  saveScores()
 
-for i = 1, 1 do
-		if ( pointsTotal[i] ) then
-				local yPos = 150 + ( i * 56 )
-local thisScore = display.newText( sceneGroup, pointsTotal[i], display.contentCenterX-30, yPos, native.systemFont, 36 )
-thisScore.anchorX = 0
-	end
-	end
-	local menuButton = display.newText( sceneGroup, "Menu", display.contentCenterX, 810, native.systemFont, 44 )
-menuButton:setFillColor( 0.75, 0.78, 1 )
-menuButton:addEventListener( "tap", gotoMenu )
+  local highScoresHeader = display.newText( sceneGroup, "Points Total", display.contentCenterX, 100, native.systemFont, 44 )
+
+  for i = 1, 1 do
+    if ( pointsTotal[i] ) then
+      local yPos = 150 + ( i * 56 )
+      local thisScore = display.newText( sceneGroup, pointsTotal[i], display.contentCenterX - 30, yPos, native.systemFont, 36 )
+      thisScore.anchorX = 0
+    end
+  end
+  local menuButton = display.newText( sceneGroup, "Menu", display.contentCenterX, 810, native.systemFont, 44 )
+  menuButton:setFillColor( 0.75, 0.78, 1 )
+
+  local lsButton = display.newText( sceneGroup, "Select a level", display.contentCenterX, 700, native.systemFont, 44)
+  lsButton:setFillColor(0.82, 0.86, 1)
+  lsButton:addEventListener( "tap", gotoLS)
+
+  menuButton:addEventListener( "tap", gotoMenu )
 end
 
 
 -- show()
 function scene:show( event )
 
-	local sceneGroup = self.view
-	local phase = event.phase
+  local sceneGroup = self.view
+  local phase = event.phase
 
-	if ( phase == "will" ) then
-		-- Code here runs when the scene is still off screen (but is about to come on screen)
+  if ( phase == "will" ) then
+    -- Code here runs when the scene is still off screen (but is about to come on screen)
 
-	elseif ( phase == "did" ) then
-		-- Code here runs when the scene is entirely on screen
+  elseif ( phase == "did" ) then
+    -- Code here runs when the scene is entirely on screen
 
-	end
+  end
 end
 
 
 -- hide()
 function scene:hide( event )
 
-	local sceneGroup = self.view
-	local phase = event.phase
+  local sceneGroup = self.view
+  local phase = event.phase
 
-	if ( phase == "will" ) then
-		-- Code here runs when the scene is on screen (but is about to go off screen)
+  if ( phase == "will" ) then
+    -- Code here runs when the scene is on screen (but is about to go off screen)
 
-	elseif ( phase == "did" ) then
-		-- Code here runs immediately after the scene goes entirely off screen
-        composer.removeScene( "highscores" )
-	end
+  elseif ( phase == "did" ) then
+    -- Code here runs immediately after the scene goes entirely off screen
+    composer.removeScene( "highscores", false )
+  end
 end
 
 
 -- destroy()
 function scene:destroy( event )
 
-	local sceneGroup = self.view
-	-- Code here runs prior to the removal of scene's view
+  local sceneGroup = self.view
+  -- Code here runs prior to the removal of scene's view
 
 end
 
