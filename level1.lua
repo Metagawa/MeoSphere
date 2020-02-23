@@ -49,15 +49,33 @@ cam.fill.scaleX = 0.00025
 cam.fill.scaleY = 0.000138
 
 
-local function gotoLS()
-  composer.gotoScene("level1")
+local function gotoMenu()
+  composer.setVariable( "finalScore", totalScore )
+  composer.gotoScene("menu")
+  Runtime:removeEventListener( "enterFrame", moveCamera )
+physics.stop()
 end
 
 local function gotoShop()
+  composer.setVariable( "finalScore", totalScore )
+
   composer.gotoScene( "highscores" )
+  Runtime:removeEventListener( "enterFrame", moveCamera )
 end
 
 
+  --adds a circle and skins a cat onto it
+  cat = display.newImage( mainGroup, "images/cat.png", 500, 500 ) cat:scale( 0.15, 0.15)
+  cat.bodyType = "kinematic"
+  cat.x = display.actualContentWidth - 1500
+  cat.y = display.actualContentHeight - 124
+
+
+  --adds physics to Catball and gives him circle physics.
+  physics.addBody( cat, { radius = 72, density = 1, friction = 0.5, bounce = .6} )
+  cat.myName = "Catball"
+  cat.linearDamping = .35
+  cat.angularDamping = .05
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
@@ -67,13 +85,13 @@ function scene:create( event )
 
   local sceneGroup = self.view
   -- Code here runs when the scene is first created but has not yet appeared on screen
-  local lsButton = display.newText( uiGroup, "Select a level", display.contentCenterX+700, 700, native.systemFont, 35)
+  local lsButton = display.newText( uiGroup, "Main Menu", display.contentCenterX+700, 700, native.systemFont, 35)
   lsButton:setFillColor(0, 0, 0)
 
   local shopButton = display.newText( uiGroup, "Visit the Shop", display.contentCenterX+700, 810, native.systemFont, 35 )
   shopButton:setFillColor(0, 0, 0)
 
-  lsButton:addEventListener( "tap", gotoLS)
+  lsButton:addEventListener( "tap", gotoMenu)
   shopButton:addEventListener( "tap", gotoShop )
   --------------------------------------------------------------------------------
   -- Camera stuff
@@ -107,20 +125,9 @@ function scene:create( event )
       camera.y = -cat.y + 500
     end
   end
+
   Runtime:addEventListener( "enterFrame", moveCamera )
 
-  --adds a circle and skins a cat onto it
-  cat = display.newImage( mainGroup, "images/cat.png", 500, 500 ) cat:scale( 0.15, 0.15)
-  cat.bodyType = "kinematic"
-  cat.x = display.actualContentWidth - 1500
-  cat.y = display.actualContentHeight - 124
-  camera:insert( cat )
-
-  --adds physics to Catball and gives him circle physics.
-  physics.addBody( cat, { radius = 72, density = 1, friction = 0.5, bounce = .6} )
-  cat.myName = "Catball"
-  cat.linearDamping = .35
-  cat.angularDamping = .05
 
   --makes the cat draggable, pauses physics while being dragged
   function cat:touch( event )
@@ -137,6 +144,7 @@ function scene:create( event )
     end
     return true
   end
+
   cat:addEventListener( "touch", cat )
 
   --tracks Catball's position at all times.
@@ -284,7 +292,7 @@ function scene:create( event )
     camera:insert(enemy[i])
   end
 
-
+  camera:insert( cat )
   --------------------------------------------------------------------------------
   -- End Level condition and sound test
   --------------------------------------------------------------------------------
@@ -298,6 +306,7 @@ function scene:create( event )
       audio.play( finishTest )
     end
   end
+
   Runtime:addEventListener("enterFrame", audioTest)
 
   --local function easterEgg()
@@ -322,8 +331,11 @@ function scene:create( event )
   --------------------------------------------------------------------------------
   -- Camera stuff
   --------------------------------------------------------------------------------
-  uiGroup:toFront()
-
+  sceneGroup:insert(cam)
+  sceneGroup:insert(camera)
+  sceneGroup:insert(mainGroup)
+  sceneGroup:insert(backGroup)
+  sceneGroup:insert(uiGroup)
 
 
   --Ugrades Below
@@ -331,11 +343,7 @@ function scene:create( event )
   --click upgrades
   --Special food spawn (Once purchased in shop will spawn a high value food in all levels)
 
-  sceneGroup:insert(cam)
-  sceneGroup:insert(camera)
-  sceneGroup:insert(mainGroup)
-  sceneGroup:insert(backGroup)
-  sceneGroup:insert(uiGroup)
+
 end
 
 -- show()
@@ -362,7 +370,15 @@ function scene:hide( event )
 
   if ( phase == "will" ) then
     -- Code here runs when the scene is on screen (but is about to go off screen)
-
+    physics.stop()
+      composer.removeScene( "level1",false )
+    Runtime:removeEventListener( "enterFrame", moveCamera )
+    cat:removeEventListener( "touch", cat )
+    Runtime:removeEventListener( "enterFrame", onEnterFrame)
+    Runtime:removeEventListener( "tap", rotatecat)
+    Runtime:removeEventListener( "collision", onCollision)
+    Runtime:removeEventListener( "enterFrame", updateText)
+    Runtime:removeEventListener("enterFrame", audioTest)
   elseif ( phase == "did" ) then
     -- Code here runs immediately after the scene goes entirely off screen
 
