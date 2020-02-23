@@ -12,7 +12,7 @@ local function gotoLS()
 end
 
 local function gotoShop()
-  composer.gotoScene( "level1" )
+  composer.gotoScene( "highscores" )
 end
 
 -- -----------------------------------------------------------------------------------

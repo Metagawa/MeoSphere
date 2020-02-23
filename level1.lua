@@ -27,7 +27,6 @@ local tapTimer
 local foodEaten = 0
 local foodTable = {"food1", "food2", "food3"}
 local backGroup
-local uiGroup
 local mainGroup
 local catballX = 0
 local catballY = 0
@@ -36,20 +35,9 @@ local totalScore = 0
 local scoreText
 local gameLoopTimer
 local enemiesDefeated = 0
+backGroup = display.newGroup()
+mainGroup = display.newGroup()
 math.randomseed(os.time())
-
---updates ui elements
-local function updateText()
-  foodText.text = "Food Consumed:  " .. foodEaten
-  tapText.text = "Total Taps:  " .. tapCount
-  powerText.text = "Power: ".. power
-  distanceText.text = "Total Distance: " .. totalDistance
-  totalScore = ((power - tapCount * 5) + (foodEaten * 500) + (totalDistance * 10) / 2)
-  scoreText.text = "Score: "..totalScore
-  uiGroup:toFront()
-end
-Runtime:addEventListener( "enterFrame", updateText)
-
 
 --------------------------------------------------------------------------------
 -- Camera stuff
@@ -194,8 +182,10 @@ function onCollision( event )
       event.object2:removeSelf()
       event.object2 = nil
     end
+  else
   end
 end
+
 
 --tracks Catball's position at all times.
 function onEnterFrame( event )
@@ -206,14 +196,14 @@ function onEnterFrame( event )
 end
 Runtime:addEventListener( "enterFrame", onEnterFrame)
 
-local function endGame()
-  composer.gotoScene( "menu", {time = 2500, effect = "crossFade"} )
-end
-if (foodEaten > 0) then
-  display.remove(cat)
-  timer.performWithDelay( 2000, endGame )
+
+local function gotoShop()
+  composer.gotoScene( "highscores" )
 end
 
+
+local beginGameLoop = function() return gameLoop() end
+timer.performWithDelay( 0, gameLoop, 1 )
 
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
@@ -226,13 +216,8 @@ function scene:create( event )
   -- Code here runs when the scene is first created but has not yet appeared on screen
 
   physics.pause()
-
-  backGroup = display.newGroup()
   sceneGroup:insert( backGroup )
-  mainGroup = display.newGroup()
   sceneGroup:insert( mainGroup )
-  uiGroup = display.newGroup()
-  sceneGroup:insert( uiGroup )
 
   --------------------------------------------------------------------------------
   --Backgrounds
@@ -282,26 +267,34 @@ function scene:create( event )
   --------------------------------------------------------------------------------
   --UI Elements
   --------------------------------------------------------------------------------
-  foodText = display.newText( uiGroup, "Power: " .. power, 1500, 80, native.systemFont, 36)
+  foodText = display.newText("Power: ", 1500, 80, native.systemFont, 36)
   foodText:setFillColor( 0, 0, 0 )
 
-  tapText = display.newText( uiGroup, "Total taps:  " .. tapCount, 1500, 120, native.systemFont, 36 )
+  tapText = display.newText("Total taps:  " .. tapCount, 1500, 120, native.systemFont, 36 )
   tapText:setFillColor( 0, 0, 0 )
 
-  powerText = display.newText( uiGroup, "Power: " .. power, 1500, 160, native.systemFont, 36)
+  powerText = display.newText("Power: " .. power, 1500, 160, native.systemFont, 36)
   powerText:setFillColor( 0, 0, 0 )
 
-  distanceText = display.newText( uiGroup, "Total Distance: " .. totalDistance - 420, 1500, 200, native.systemFont, 36)
+  distanceText = display.newText( "Total Distance: " .. totalDistance - 420, 1500, 200, native.systemFont, 36)
   distanceText:setFillColor( 0, 0, 0 )
 
-  scoreText = display.newText( uiGroup, "Score: " .. totalScore - 420, 1500, 240, native.systemFont, 36)
+  scoreText = display.newText("Score: " .. totalScore - 420, 1500, 240, native.systemFont, 36)
   scoreText:setFillColor( 0, 0, 0 )
 
+  --updates ui elements
+  local function updateText()
+    foodText.text = "Food Consumed:  " .. foodEaten
+    tapText.text = "Total Taps:  " .. tapCount
+    powerText.text = "Power: ".. power
+    distanceText.text = "Total Distance: " .. totalDistance
+    totalScore = ((power - tapCount * 5) + (foodEaten * 500) + (totalDistance * 10) / 2)
+    scoreText.text = "Score: "..totalScore
+  end
+  Runtime:addEventListener( "enterFrame", updateText)
   Runtime:addEventListener( "enterFrame", moveCamera )
   Runtime:addEventListener( "tap", rotatecat)
-
 end
-
 
 -- show()
 function scene:show( event )
@@ -314,17 +307,16 @@ function scene:show( event )
 
   elseif ( phase == "did" ) then
     -- Code here runs when the scene is entirely on screen
+
     --prevents cat from moving before ten seconds have passed
     local function tapperCountdown( event )
       physics.start()
-        Runtime:removeEventListener( "tap", rotatecat)
+      Runtime:removeEventListener( "tap", rotatecat)
     end
     timer.performWithDelay( 3000, tapperCountdown)
     Runtime:addEventListener( "collision", onCollision)
-    gameLoopTimer = timer.performWithDelay( 1, gameLoop, 1)
   end
 end
-
 
 -- hide()
 function scene:hide( event )
@@ -334,25 +326,21 @@ function scene:hide( event )
 
   if ( phase == "will" ) then
     -- Code here runs when the scene is on screen (but is about to go off screen)
-    timer.cancel( gameLoopTimer)
-
   elseif ( phase == "did" ) then
     -- Code here runs immediately after the scene goes entirely off screen
     Runtime:removeEventListener("collision, onCollision")
     physics.pause()
-    composer.removeScene( "game" )
+    display.newText( "You win!", 160, 240, native.systemFont, 44 )
+        composer.gotoScene( "level1" )
   end
 end
-
 
 -- destroy()
 function scene:destroy( event )
 
   local sceneGroup = self.view
   -- Code here runs prior to the removal of scene's view
-
 end
-
 
 -- -----------------------------------------------------------------------------------
 -- Scene event function listeners
