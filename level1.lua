@@ -121,7 +121,7 @@ local function updateText()
   totalScore = ((power - tapCount * 5) + (foodEaten * 500) + (totalDistance * 10) / 2)
   scoreText.text = "Score: "..totalScore
 
-  if ( foodEaten == 1 ) then
+  if ( foodEaten == 15 ) then
     timer.performWithDelay( 0, endGame, 1 )
   end
 end
