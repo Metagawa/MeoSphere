@@ -1,5 +1,6 @@
 local composer = require( "composer" )
 
- math.randomseed(os.time())
+math.randomseed(os.time())
 
- composer.gotoScene( "menu" )
+composer.gotoScene( "menu" )
+  display.setDefault( "background", 0,0,0 )
