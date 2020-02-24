@@ -58,7 +58,6 @@ end
 
 local function gotoShop()
   composer.setVariable( "finalScore", totalScore )
-
   composer.gotoScene( "highscores" )
   Runtime:removeEventListener( "enterFrame", moveCamera )
 end
