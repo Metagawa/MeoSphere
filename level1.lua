@@ -42,11 +42,8 @@ display.setDefault( "background", 72, 209, 204 )
 display.setDefault( "textureWrapX", "repeat" )
 display.setDefault( "textureWrapY", "repeat" )
 
-local x, y = display.contentCenterX, display.contentCenterY
+local x, y =1,1
 local cam = display.newRect( x, y, 9999999, 9999999 )
-cam.fill = { type = "image", filename = "images/background2.png" }
-cam.fill.scaleX = 0.00025
-cam.fill.scaleY = 0.000138
 
 
 local function gotoMenu()
@@ -78,7 +75,15 @@ end
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
+display.setDefault( "background", 72, 209, 204 )
+display.setDefault( "textureWrapX", "repeat" )
+display.setDefault( "textureWrapY", "repeat" )
 
+local x, y = display.contentCenterX, display.contentCenterY
+local cam = display.newRect( x, y, 9999999, 9999999 )
+cam.fill = { type = "image", filename = "background1.png" }
+cam.fill.scaleX = 0.00025
+cam.fill.scaleY = 0.000138
 -- create()
 function scene:create( event )
 
@@ -102,12 +107,11 @@ function scene:create( event )
   camera:insert( cam )
 
   -- X-Axis looping background
-  bgDistanceX = 1080
-  bgDistanceY = 700
+  floorBGDistanceX = 1080
   for i = 1, 1000 do
-    sky = display.newImage( "images/background1.png", bgDistanceX, 700, true )
-    bgDistanceX = bgDistanceX + 2365
-    camera:insert( sky )
+    floor = display.newImage( "images/background1.png", floorBGDistanceX, 900, true )
+    camera:insert( floor )
+        floorBGDistanceX = floorBGDistanceX + 2365
   end
 
   local grass = display.newImage( "images/food2.png", 160, 440, true )
