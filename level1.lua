@@ -367,7 +367,8 @@ function scene:hide( event )
 
   if ( phase == "will" ) then
     -- Code here runs when the scene is on screen (but is about to go off screen)
-    physics.stop()audio.stop()
+    physics.stop()
+    audio.stop()
       composer.removeScene( "level1",false )
     Runtime:removeEventListener( "enterFrame", moveCamera )
     cat:removeEventListener( "touch", cat )
