@@ -11,7 +11,7 @@ local function gotoLS()
   composer.gotoScene("level1")
   local backgroundMusic = audio.loadSound("sound/bgm1.mp3")
 
-local backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1, fadein=2000 } )
+local backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1, fadein=10000 } )
 end
 
 local function gotoShop()
