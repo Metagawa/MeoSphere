@@ -308,12 +308,9 @@ function scene:create( event )
 
   Runtime:addEventListener("enterFrame", audioTest)
 
-  --local function easterEgg()
 
-  --  local surprise = audio.loadSound("sound/")
+  --Runtime:addEventListener("enterFrame", backgroundMusic)
 
-  --end
-  --Runtime:addEventListener("enterFrame", surprise)
 
   --local function nomNom()
 
@@ -370,6 +367,7 @@ function scene:hide( event )
   if ( phase == "will" ) then
     -- Code here runs when the scene is on screen (but is about to go off screen)
     physics.stop()
+    audio.stop()
       composer.removeScene( "level1",false )
     Runtime:removeEventListener( "enterFrame", moveCamera )
     cat:removeEventListener( "touch", cat )
