@@ -43,7 +43,7 @@ display.setDefault( "textureWrapX", "repeat" )
 display.setDefault( "textureWrapY", "repeat" )
 
 local x, y = display.contentCenterX, display.contentCenterY
-local cam = display.newRect( x, y, 9999999, 9999999 )
+local cam = display.newRect( x, y, 1, 1 )
 cam.fill = { type = "image", filename = "images/background2.png" }
 cam.fill.scaleX = 0.00025
 cam.fill.scaleY = 0.000138
@@ -58,7 +58,6 @@ end
 
 local function gotoShop()
   composer.setVariable( "finalScore", totalScore )
-
   composer.gotoScene( "highscores" )
   Runtime:removeEventListener( "enterFrame", moveCamera )
 end
@@ -102,6 +101,7 @@ function scene:create( event )
   camera.x = 0
   camera:insert( cam )
 
+
   -- X-Axis looping background
   bgDistanceX = 1080
   bgDistanceY = 700
@@ -130,22 +130,6 @@ function scene:create( event )
 
 
   --makes the cat draggable, pauses physics while being dragged
-  function cat:touch( event )
-    if event.phase == "began" then
-      physics.pause()
-      self.markX = self.x -- store x location of object
-      self.markY = self.y -- store y location of object
-    elseif event.phase == "moved" then
-      local x = (event.x - event.xStart) + self.markX
-      local y = (event.y - event.yStart) + self.markY
-      self.x, self.y = x, y -- move object based on calculations above
-    elseif event.phase == "ended" then
-      physics.start()
-    end
-    return true
-  end
-
-  cat:addEventListener( "touch", cat )
 
   --tracks Catball's position at all times.
   function onEnterFrame( event )
@@ -309,12 +293,9 @@ function scene:create( event )
 
   Runtime:addEventListener("enterFrame", audioTest)
 
-  --local function easterEgg()
 
-  --  local surprise = audio.loadSound("sound/")
+  --Runtime:addEventListener("enterFrame", backgroundMusic)
 
-  --end
-  --Runtime:addEventListener("enterFrame", surprise)
 
   --local function nomNom()
 
@@ -371,6 +352,7 @@ function scene:hide( event )
   if ( phase == "will" ) then
     -- Code here runs when the scene is on screen (but is about to go off screen)
     physics.stop()
+    audio.stop()
       composer.removeScene( "level1",false )
     Runtime:removeEventListener( "enterFrame", moveCamera )
     cat:removeEventListener( "touch", cat )
