@@ -12,7 +12,7 @@ physics.start()
 physics.pause()
 physics.setGravity( 0, 22)
 physics.setScale( 80 )
-physics.setDrawMode( "hybrid" )
+physics.setDrawMode( "normal" )
 math.randomseed(os.time( ))
 
 -- -----------------------------------------------------------------------------------
@@ -63,18 +63,18 @@ local function gotoShop()
 end
 
 
-  --adds a circle and skins a cat onto it
-  cat = display.newImage( mainGroup, "images/cat.png", 500, 500 ) cat:scale( 0.15, 0.15)
-  cat.bodyType = "kinematic"
-  cat.x = display.actualContentWidth - 1500
-  cat.y = display.actualContentHeight - 124
+--adds a circle and skins a cat onto it
+cat = display.newImage( mainGroup, "images/cat.png", 500, 500 ) cat:scale( 0.15, 0.15)
+cat.bodyType = "kinematic"
+cat.x = display.actualContentWidth - 1500
+cat.y = display.actualContentHeight - 124
 
 
-  --adds physics to Catball and gives him circle physics.
-  physics.addBody( cat, { radius = 72, density = 1, friction = 0.5, bounce = .6} )
-  cat.myName = "Catball"
-  cat.linearDamping = .35
-  cat.angularDamping = .05
+--adds physics to Catball and gives him circle physics.
+physics.addBody( cat, { radius = 72, density = 1, friction = 0.5, bounce = .6} )
+cat.myName = "Catball"
+cat.linearDamping = .35
+cat.angularDamping = .05
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
@@ -84,14 +84,21 @@ function scene:create( event )
 
   local sceneGroup = self.view
   -- Code here runs when the scene is first created but has not yet appeared on screen
-  local lsButton = display.newText( uiGroup, "Main Menu", display.contentCenterX+700, 700, native.systemFont, 35)
-  lsButton:setFillColor(0, 0, 0)
 
-  local shopButton = display.newText( uiGroup, "Visit the Shop", display.contentCenterX+700, 810, native.systemFont, 35 )
-  shopButton:setFillColor(0, 0, 0)
+  local lsButton = display.newImageRect( uiGroup, "images/button.png",  300, 100 )
+  lsButton.x = display.contentCenterX + 700
+  lsButton.y = 100
+  local lsButtonText = display.newText( uiGroup, "Main Menu", display.contentCenterX + 700, 100, native.systemFont, 35)
+  lsButtonText:setFillColor(1, 1, 1)
 
-  lsButton:addEventListener( "tap", gotoMenu)
-  shopButton:addEventListener( "tap", gotoShop )
+
+  local shopButton = display.newImageRect( uiGroup, "images/button.png",  300, 100 )
+  shopButton.x = display.contentCenterX + 700
+  shopButton.y = 250
+  local shopButtonText = display.newText( uiGroup, "Visit the Shop", display.contentCenterX + 700, 250, native.systemFont, 35 )
+  shopButtonText:setFillColor(1, 1, 1)
+
+
   --------------------------------------------------------------------------------
   -- Camera stuff
   --------------------------------------------------------------------------------
@@ -106,14 +113,10 @@ function scene:create( event )
   bgDistanceX = 1080
   bgDistanceY = 700
   for i = 1, 1000 do
-    sky = display.newImage( "images/background1.png", bgDistanceX, 400, true )
-    bgDistanceX = bgDistanceX + 2365
+    sky = display.newImage( "images/bg1.png", bgDistanceX, 830, true )
+    bgDistanceX = bgDistanceX + 1920
     camera:insert( sky )
   end
-
-  local grass = display.newImage( "images/food2.png", 160, 440, true )
-  camera:insert( grass )
-  physics.addBody( grass, "static", { friction = 0.5, bounce = 0.3 } )
 
   --------------------------------------------------------------------------------
   --Catball
@@ -122,7 +125,7 @@ function scene:create( event )
   local function moveCamera()
     if (cat.x > 0)then
       camera.x = -cat.x + 300
-      camera.y = -cat.y + 500
+      camera.y = -cat.y + 680
     end
   end
 
@@ -156,6 +159,8 @@ function scene:create( event )
   local function tapperCountdown( event )
     physics.start()
     Runtime:removeEventListener("tap", rotatecat)
+    lsButton:addEventListener( "tap", gotoMenu)
+    shopButton:addEventListener( "tap", gotoShop )
   end
   timer.performWithDelay( 5000, tapperCountdown)
 
@@ -197,6 +202,8 @@ function scene:create( event )
   floor.anchorX = 0
   floor.anchorY = 1
   floor.x, floor.y = 0, 1080
+  floor.alpha=0
+  floor.isHitTestable=true
   physics.addBody( floor, "static", { friction = 2.5, shape = floorShape, bounce = 00 } )
 
   local wall = display.newRect( 0, 600, 1, 500000 )
@@ -208,15 +215,15 @@ function scene:create( event )
   --------------------------------------------------------------------------------
   -- adds UI elements
   --------------------------------------------------------------------------------
-  foodText = display.newText( uiGroup, "Power: " .. power, 1500, 80, native.systemFont, 36)
+  foodText = display.newText( uiGroup, "Power: " .. power, 1200, 80, native.systemFont, 36)
   foodText:setFillColor( 0, 0, 0 )
-  tapText = display.newText( uiGroup, "Total taps:  " .. tapCount, 1500, 120, native.systemFont, 36 )
+  tapText = display.newText( uiGroup, "Total taps:  " .. tapCount, 1200, 120, native.systemFont, 36 )
   tapText:setFillColor( 0, 0, 0 )
-  speedText = display.newText( uiGroup, "Power: " .. power, 1500, 160, native.systemFont, 36)
+  speedText = display.newText( uiGroup, "Power: " .. power, 1200, 160, native.systemFont, 36)
   speedText:setFillColor( 0, 0, 0 )
-  distanceText = display.newText( uiGroup, "Total Distance: " .. totalDistance - 420, 1500, 200, native.systemFont, 36)
+  distanceText = display.newText( uiGroup, "Total Distance: " .. totalDistance - 420, 1200, 200, native.systemFont, 36)
   distanceText:setFillColor( 0, 0, 0 )
-  scoreText = display.newText( uiGroup, "Score: " .. totalScore - 420, 1500, 240, native.systemFont, 36)
+  scoreText = display.newText( uiGroup, "Score: " .. totalScore - 420, 1200, 240, native.systemFont, 36)
   scoreText:setFillColor( 0, 0, 0 )
   --updates ui elements
   local function updateText()
@@ -268,7 +275,7 @@ function scene:create( event )
   local enemy = {}
 
   for i = 1, 250 do
-    enemy[i] = display.newImage( mainGroup, "images/enemy1.png" ) enemy[i]:scale( 0.05, 0.05)
+    enemy[i] = display.newImage( mainGroup, "images/enemy1.png" ) enemy[i]:scale( 0.5, 0.5)
     physics.addBody( enemy[i], "static", { radius = 50, density = 1, friction = 1, bounce = 2} )
     enemy[i].x = 4000 + math.random(display.screenOriginX, display.contentWidth * 100)
     enemy[i].y = -7500 + math.random(display.screenOriginY, display.contentHeight * 7)
@@ -353,7 +360,7 @@ function scene:hide( event )
     -- Code here runs when the scene is on screen (but is about to go off screen)
     physics.stop()
     audio.stop()
-      composer.removeScene( "level1",false )
+    composer.removeScene( "level1", false )
     Runtime:removeEventListener( "enterFrame", moveCamera )
     cat:removeEventListener( "touch", cat )
     Runtime:removeEventListener( "enterFrame", onEnterFrame)
