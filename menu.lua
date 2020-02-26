@@ -2,6 +2,7 @@
 local composer = require( "composer" )
 
 local scene = composer.newScene()
+display.setDefault( "background", 0,0,0 )
 
 -- -----------------------------------------------------------------------------------
 -- Code outside of the scene event functions below will only be executed ONCE unless
@@ -16,7 +17,7 @@ end
 
 local function gotoShop()
   composer.gotoScene( "highscores" )
-  local backgroundMusic = audio.loadSound("sound/bgm1.mp3")
+  local backgroundMusic = audio.loadSound("sound/bgm2.mp3")
 
 local backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1, fadein=2000 } )
 end
@@ -38,11 +39,11 @@ function scene:create( event )
   title.x = display.contentCenterX
   title.y = 300
 
-  local lsButton = display.newText( sceneGroup, "Select a level", display.contentCenterX, 700, native.systemFont, 44)
-  lsButton:setFillColor(0.82, 0.86, 1)
+  local lsButton = display.newText( sceneGroup, "Start the Game", display.contentCenterX, 800, native.systemFont, 44)
+  lsButton:setFillColor(1, 1, 1)
 
-  local shopButton = display.newText( sceneGroup, "Visit the Shop", display.contentCenterX, 810, native.systemFont, 44 )
-  shopButton:setFillColor(0.75, 0.78, 1)
+  local shopButton = display.newText( sceneGroup, "Visit the Shop", display.contentCenterX, 910, native.systemFont, 44 )
+  shopButton:setFillColor(1, 1, 1)
 
   lsButton:addEventListener( "tap", gotoLS)
   shopButton:addEventListener( "tap", gotoShop )
