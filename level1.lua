@@ -43,7 +43,7 @@ display.setDefault( "textureWrapX", "repeat" )
 display.setDefault( "textureWrapY", "repeat" )
 
 local x, y = display.contentCenterX, display.contentCenterY
-local cam = display.newRect( x, y, 9999999, 9999999 )
+local cam = display.newRect( x, y, 1, 1 )
 cam.fill = { type = "image", filename = "images/background2.png" }
 cam.fill.scaleX = 0.00025
 cam.fill.scaleY = 0.000138
@@ -100,6 +100,7 @@ function scene:create( event )
   local camera = display.newGroup();
   camera.x = 0
   camera:insert( cam )
+
 
   -- X-Axis looping background
   bgDistanceX = 1080
