@@ -78,11 +78,11 @@ function scene:create( event )
     -- Save the scores
     saveScores()
 
-    local background = display.newImageRect( sceneGroup, "images/background2.png", 800, 1400 )
+    local background = display.newImageRect( sceneGroup, "images/shopBG.png", 1920, 1080 )
     background.x = display.contentCenterX
     background.y = display.contentCenterY
 
-    local highScoresHeader = display.newText( sceneGroup, "High Scores", display.contentCenterX, 100, native.systemFont, 44 )
+    local highScoresHeader = display.newText( sceneGroup, "Cosmic Ascensions", display.contentCenterX, 100, native.systemFont, 44 )
 
     for i = 1, 10 do
         if ( scoresTable[i] ) then

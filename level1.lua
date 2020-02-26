@@ -106,7 +106,7 @@ function scene:create( event )
   bgDistanceX = 1080
   bgDistanceY = 700
   for i = 1, 1000 do
-    sky = display.newImage( "images/background1.png", bgDistanceX, 900, true )
+    sky = display.newImage( "images/background1.png", bgDistanceX, 400, true )
     bgDistanceX = bgDistanceX + 2365
     camera:insert( sky )
   end

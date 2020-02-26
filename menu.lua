@@ -16,7 +16,7 @@ end
 
 local function gotoShop()
   composer.gotoScene( "highscores" )
-  local backgroundMusic = audio.loadSound("sound/bgm1.mp3")
+  local backgroundMusic = audio.loadSound("sound/bgm2.mp3")
 
 local backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1, fadein=2000 } )
 end
