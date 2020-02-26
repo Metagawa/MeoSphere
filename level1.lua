@@ -43,7 +43,7 @@ display.setDefault( "textureWrapX", "repeat" )
 display.setDefault( "textureWrapY", "repeat" )
 
 local x, y = display.contentCenterX, display.contentCenterY
-local cam = display.newRect( x, y, 1, 1 )
+local cam = display.newRect( x, y, 4999999, 4999999 )
 cam.fill = { type = "image", filename = "images/background2.png" }
 cam.fill.scaleX = 0.00025
 cam.fill.scaleY = 0.000138
@@ -53,7 +53,7 @@ local function gotoMenu()
   composer.setVariable( "finalScore", totalScore )
   composer.gotoScene("menu")
   Runtime:removeEventListener( "enterFrame", moveCamera )
-physics.stop()
+
 end
 
 local function gotoShop()
@@ -106,7 +106,7 @@ function scene:create( event )
   bgDistanceX = 1080
   bgDistanceY = 700
   for i = 1, 1000 do
-    sky = display.newImage( "images/background1.png", bgDistanceX, 700, true )
+    sky = display.newImage( "images/background1.png", bgDistanceX, 900, true )
     bgDistanceX = bgDistanceX + 2365
     camera:insert( sky )
   end
@@ -250,8 +250,8 @@ function scene:create( event )
     food2.x = foodXSpawn + foodSpacer * 1.6
     food2.y = 960
     foodXSpawn = foodXSpawn + 600
-    local food3 = display.newImage( mainGroup, "images/food3.png" ) food3:scale( 1, 1)
-    physics.addBody( food3, "static", { radius = 50, density = 0, friction = 1, bounce = 0.5} )
+    local food3 = display.newImage( mainGroup, "images/food3.png" ) food3:scale( 0.47, 0.47)
+    physics.addBody( food3, "static", { radius = 70, density = 0, friction = 1, bounce = 0.5} )
     food3.myName = "food"
     food3.x = foodXSpawn + foodSpacer * 1.8
     food3.y = 970
@@ -268,7 +268,7 @@ function scene:create( event )
   local enemy = {}
 
   for i = 1, 250 do
-    enemy[i] = display.newImage( mainGroup, "images/enemy1.png" ) enemy[i]:scale( 0.5, 0.5)
+    enemy[i] = display.newImage( mainGroup, "images/enemy1.png" ) enemy[i]:scale( 0.05, 0.05)
     physics.addBody( enemy[i], "static", { radius = 50, density = 1, friction = 1, bounce = 2} )
     enemy[i].x = 4000 + math.random(display.screenOriginX, display.contentWidth * 100)
     enemy[i].y = -7500 + math.random(display.screenOriginY, display.contentHeight * 7)
@@ -312,7 +312,7 @@ function scene:create( event )
   --------------------------------------------------------------------------------
   -- Camera stuff
   --------------------------------------------------------------------------------
-  sceneGroup:insert(cam)
+
   sceneGroup:insert(camera)
   sceneGroup:insert(mainGroup)
   sceneGroup:insert(backGroup)
