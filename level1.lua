@@ -43,7 +43,7 @@ display.setDefault( "textureWrapX", "repeat" )
 display.setDefault( "textureWrapY", "repeat" )
 
 local x, y = display.contentCenterX, display.contentCenterY
-local cam = display.newRect( x, y, 1, 1 )
+local cam = display.newRect( x, y, 4999999, 4999999 )
 cam.fill = { type = "image", filename = "images/background2.png" }
 cam.fill.scaleX = 0.00025
 cam.fill.scaleY = 0.000138
@@ -53,7 +53,7 @@ local function gotoMenu()
   composer.setVariable( "finalScore", totalScore )
   composer.gotoScene("menu")
   Runtime:removeEventListener( "enterFrame", moveCamera )
-physics.stop()
+
 end
 
 local function gotoShop()
@@ -106,7 +106,7 @@ function scene:create( event )
   bgDistanceX = 1080
   bgDistanceY = 700
   for i = 1, 1000 do
-    sky = display.newImage( "images/background1.png", bgDistanceX, 700, true )
+    sky = display.newImage( "images/background1.png", bgDistanceX, 900, true )
     bgDistanceX = bgDistanceX + 2365
     camera:insert( sky )
   end
@@ -312,7 +312,7 @@ function scene:create( event )
   --------------------------------------------------------------------------------
   -- Camera stuff
   --------------------------------------------------------------------------------
-  sceneGroup:insert(cam)
+
   sceneGroup:insert(camera)
   sceneGroup:insert(mainGroup)
   sceneGroup:insert(backGroup)
