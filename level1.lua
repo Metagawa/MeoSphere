@@ -250,8 +250,8 @@ function scene:create( event )
     food2.x = foodXSpawn + foodSpacer * 1.6
     food2.y = 960
     foodXSpawn = foodXSpawn + 600
-    local food3 = display.newImage( mainGroup, "images/food3.png" ) food3:scale( 1, 1)
-    physics.addBody( food3, "static", { radius = 50, density = 0, friction = 1, bounce = 0.5} )
+    local food3 = display.newImage( mainGroup, "images/food3.png" ) food3:scale( 0.47, 0.47)
+    physics.addBody( food3, "static", { radius = 70, density = 0, friction = 1, bounce = 0.5} )
     food3.myName = "food"
     food3.x = foodXSpawn + foodSpacer * 1.8
     food3.y = 970
@@ -268,7 +268,7 @@ function scene:create( event )
   local enemy = {}
 
   for i = 1, 250 do
-    enemy[i] = display.newImage( mainGroup, "images/enemy1.png" ) enemy[i]:scale( 0.5, 0.5)
+    enemy[i] = display.newImage( mainGroup, "images/enemy1.png" ) enemy[i]:scale( 0.05, 0.05)
     physics.addBody( enemy[i], "static", { radius = 50, density = 1, friction = 1, bounce = 2} )
     enemy[i].x = 4000 + math.random(display.screenOriginX, display.contentWidth * 100)
     enemy[i].y = -7500 + math.random(display.screenOriginY, display.contentHeight * 7)
