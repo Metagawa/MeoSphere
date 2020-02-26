@@ -130,22 +130,6 @@ function scene:create( event )
 
 
   --makes the cat draggable, pauses physics while being dragged
-  function cat:touch( event )
-    if event.phase == "began" then
-      physics.pause()
-      self.markX = self.x -- store x location of object
-      self.markY = self.y -- store y location of object
-    elseif event.phase == "moved" then
-      local x = (event.x - event.xStart) + self.markX
-      local y = (event.y - event.yStart) + self.markY
-      self.x, self.y = x, y -- move object based on calculations above
-    elseif event.phase == "ended" then
-      physics.start()
-    end
-    return true
-  end
-
-  cat:addEventListener( "touch", cat )
 
   --tracks Catball's position at all times.
   function onEnterFrame( event )
