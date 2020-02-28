@@ -51,7 +51,7 @@ local function gotoMenu()
   composer.gotoScene( "menu", { time = 800, effect = "crossFade" } )
 end
 local function gotoLS()
-  composer.gotoScene("level1")
+  composer.gotoScene("game")
   local backgroundMusic = audio.loadSound("sound/bgm1.mp3")
 
 local backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1, fadein=10000 } )

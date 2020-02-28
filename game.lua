@@ -4,7 +4,8 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 
 --------------------------------------------------------------------------------
--- include Corona's "physics" library --------------------------------------------------------------------------------
+-- include Corona's "physics" library 
+--------------------------------------------------------------------------------
 
 --physics stuff
 local physics = require "physics"
@@ -44,31 +45,27 @@ display.setDefault( "textureWrapY", "repeat" )
 
 local x, y = display.contentCenterX, display.contentCenterY
 local cam = display.newRect( x, y, 4999999, 4999999 )
-cam.fill = { type = "image", filename = "images/background2.png" }
-cam.fill.scaleX = 0.00025
-cam.fill.scaleY = 0.000138
-
+cam.fill = { type = "image", filename = "images/sky.png" }
+cam.fill.scaleX = 0.0007
+cam.fill.scaleY = 0.0007
 
 local function gotoMenu()
   composer.setVariable( "finalScore", totalScore )
   composer.gotoScene("menu")
   Runtime:removeEventListener( "enterFrame", moveCamera )
-
 end
 
 local function gotoShop()
   composer.setVariable( "finalScore", totalScore )
-  composer.gotoScene( "highscores" )
+  composer.gotoScene( "shop" )
   Runtime:removeEventListener( "enterFrame", moveCamera )
 end
-
 
 --adds a circle and skins a cat onto it
 cat = display.newImage( mainGroup, "images/cat.png", 500, 500 ) cat:scale( 0.15, 0.15)
 cat.bodyType = "kinematic"
 cat.x = display.actualContentWidth - 1500
 cat.y = display.actualContentHeight - 124
-
 
 --adds physics to Catball and gives him circle physics.
 physics.addBody( cat, { radius = 72, density = 1, friction = 0.5, bounce = .6} )
@@ -85,19 +82,18 @@ function scene:create( event )
   local sceneGroup = self.view
   -- Code here runs when the scene is first created but has not yet appeared on screen
 
-  local lsButton = display.newImageRect( uiGroup, "images/button.png",  300, 100 )
+  local lsButton = display.newImageRect( uiGroup, "images/button.png", 300, 100 )
   lsButton.x = display.contentCenterX + 700
   lsButton.y = 100
   local lsButtonText = display.newText( uiGroup, "Main Menu", display.contentCenterX + 700, 100, native.systemFont, 35)
   lsButtonText:setFillColor(1, 1, 1)
 
 
-  local shopButton = display.newImageRect( uiGroup, "images/button.png",  300, 100 )
+  local shopButton = display.newImageRect( uiGroup, "images/button.png", 300, 100 )
   shopButton.x = display.contentCenterX + 700
   shopButton.y = 250
   local shopButtonText = display.newText( uiGroup, "Visit the Shop", display.contentCenterX + 700, 250, native.systemFont, 35 )
   shopButtonText:setFillColor(1, 1, 1)
-
 
   --------------------------------------------------------------------------------
   -- Camera stuff
@@ -107,7 +103,6 @@ function scene:create( event )
   local camera = display.newGroup();
   camera.x = 0
   camera:insert( cam )
-
 
   -- X-Axis looping background
   bgDistanceX = 1080
@@ -131,7 +126,6 @@ function scene:create( event )
 
   Runtime:addEventListener( "enterFrame", moveCamera )
 
-
   --makes the cat draggable, pauses physics while being dragged
 
   --tracks Catball's position at all times.
@@ -144,7 +138,6 @@ function scene:create( event )
   end
   Runtime:addEventListener( "enterFrame", onEnterFrame)
 
-
   --this rotates the cat and shoots him to the right with increasing strength the more taps have occurred
   local function rotatecat()
     tapCount = tapCount + 1
@@ -155,25 +148,23 @@ function scene:create( event )
   end
   Runtime:addEventListener( "tap", rotatecat)
 
-
-  local secondsLeft = 5  -- 10 minutes * 60 seconds
+  local secondsLeft = 5 -- 10 minutes * 60 seconds
 
   local clockText = display.newText( "3", 1800, 1000, native.systemFont, 60 )
   clockText:setFillColor( 1, 1, 1 )
-  local clockBG = display.newImageRect( uiGroup, "images/button.png",  200, 100 )
+  local clockBG = display.newImageRect( uiGroup, "images/button.png", 200, 100 )
   clockBG.x = 1800
   clockBG.y = 1000
   local function updateTime( event )
     secondsLeft = secondsLeft - 1
     local timeDisplay = string.format( "00:%02d", secondsLeft )
     clockText.text = timeDisplay
-if (secondsLeft==0) then
-      clockText.alpha=0
-      clockBG.alpha=0
-end
-end
-local countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
-
+    if (secondsLeft == 0) then
+      clockText.alpha = 0
+      clockBG.alpha = 0
+    end
+  end
+  local countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
 
   --prevents cat from moving before ten seconds have passed
   local function tapperCountdown( event )
@@ -211,13 +202,11 @@ local countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
         event.object2 = nil
         finishTest = audio.loadSound("sound/correct.swf.mp3")
         audio.play( finishTest )
-      elseif  event.object1.myName == "Catball" and event.object2.myName == "floor" or event.object1.myName == "floor" and event.object2.myName == "Catball" then
+      elseif event.object1.myName == "Catball" and event.object2.myName == "floor" or event.object1.myName == "floor" and event.object2.myName == "Catball" then
         finishTest = audio.loadSound("sound/correct.swf.mp3")
         audio.play( finishTest )
       end
-
     end
-
   end
 
   Runtime:addEventListener( "collision", onCollision)
@@ -229,10 +218,10 @@ local countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
   floor.anchorX = 0
   floor.anchorY = 1
   floor.x, floor.y = 0, 1080
-  floor.alpha=0
-  floor.isHitTestable=true
+  floor.alpha = 0
+  floor.isHitTestable = true
   physics.addBody( floor, "static", { friction = 2.5, shape = floorShape, bounce = 00 } )
-  floor.myName="floor"
+  floor.myName = "floor"
 
   local wall = display.newRect( 0, 600, 1, 500000 )
   wall.x, wall.y = 0, 1080
@@ -310,67 +299,36 @@ local countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
     enemy[i].myName = "enemy"
     camera:insert(enemy[i])
   end
-
   camera:insert( cat )
-
-
-
-
-  --Runtime:addEventListener("enterFrame", backgroundMusic)
-
-
-  --local function nomNom()
-
-  --  local heavyNom = audio.loadSound("sound/")
-
-
-  --end
-  --Runtime:addEventListener("enterFrame", audioTest)
-
-
-  --Sounds needed.
-  --When food is eaten, appropriate enemy sounds, cat impact sounds,pain, end 'jingle'
 
   --------------------------------------------------------------------------------
   -- Camera stuff
   --------------------------------------------------------------------------------
-
   sceneGroup:insert(camera)
   sceneGroup:insert(mainGroup)
   sceneGroup:insert(backGroup)
   sceneGroup:insert(uiGroup)
-
-
   --Ugrades Below
   --3 Different cats (Vary statistics)
   --click upgrades
   --Special food spawn (Once purchased in shop will spawn a high value food in all levels)
-
-
 end
 
 -- show()
 function scene:show( event )
-
   local sceneGroup = self.view
   local phase = event.phase
-
   if ( phase == "will" ) then
     -- Code here runs when the scene is still off screen (but is about to come on screen)
-
   elseif ( phase == "did" ) then
     -- Code here runs when the scene is entirely on screen
-
   end
 end
 
-
 -- hide()
 function scene:hide( event )
-
   local sceneGroup = self.view
   local phase = event.phase
-
   if ( phase == "will" ) then
     -- Code here runs when the scene is on screen (but is about to go off screen)
     physics.stop()
@@ -385,18 +343,14 @@ function scene:hide( event )
     Runtime:removeEventListener("enterFrame", audioTest)
   elseif ( phase == "did" ) then
     -- Code here runs immediately after the scene goes entirely off screen
-
   end
 end
 
 -- destroy()
 function scene:destroy( event )
-
   local sceneGroup = self.view
   -- Code here runs prior to the removal of scene's view
-
 end
-
 
 -- -----------------------------------------------------------------------------------
 -- Scene event function listeners
