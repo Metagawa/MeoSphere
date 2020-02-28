@@ -193,20 +193,27 @@ local countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
 
     if (event.phase == "began" ) then
 
-      if event.object1.myName == "Catball" and event.object2.myName == "food" then
+      if event.object1.myName == "Catball" and event.object2.myName == "food" or event.object1.myName == "food" and event.object2.myName == "Catball" then
         foodEaten = foodEaten + 1
         CBx, CBy = event.object1:getLinearVelocity()
         event.object1:setLinearVelocity( CBx + CBy + 1200, - CBy - power - 2200)
         event.contact.isEnabled = false
         event.object2:removeSelf()
         event.object2 = nil
-      elseif event.object1.myName == "Catball" and event.object2.myName == "enemy" then
+        finishTest = audio.loadSound("sound/correct.swf.mp3")
+        audio.play( finishTest )
+      elseif event.object1.myName == "Catball" and event.object2.myName == "enemy" or event.object1.myName == "enemy" and event.object2.myName == "Catball" then
         enemiesDefeated = enemiesDefeated + 1
         CBx, CBy = event.object1:getLinearVelocity()
         event.object1:setLinearVelocity( CBx + 1800, CBy - 3500)
         event.contact.isEnabled = false
         event.object2:removeSelf()
         event.object2 = nil
+        finishTest = audio.loadSound("sound/correct.swf.mp3")
+        audio.play( finishTest )
+      elseif  event.object1.myName == "Catball" and event.object2.myName == "floor" or event.object1.myName == "floor" and event.object2.myName == "Catball" then
+        finishTest = audio.loadSound("sound/correct.swf.mp3")
+        audio.play( finishTest )
       end
 
     end
@@ -225,6 +232,7 @@ local countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
   floor.alpha=0
   floor.isHitTestable=true
   physics.addBody( floor, "static", { friction = 2.5, shape = floorShape, bounce = 00 } )
+  floor.myName="floor"
 
   local wall = display.newRect( 0, 600, 1, 500000 )
   wall.x, wall.y = 0, 1080
@@ -304,21 +312,8 @@ local countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
   end
 
   camera:insert( cat )
-  --------------------------------------------------------------------------------
-  -- End Level condition and sound test
-  --------------------------------------------------------------------------------
 
 
-  local function audioTest()
-
-    local finishTest = audio.loadSound("sound/correct.swf.mp3")
-
-    if totalDistance >= 2000 and totalScore >= 15000 then
-      audio.play( finishTest )
-    end
-  end
-
-  Runtime:addEventListener("enterFrame", audioTest)
 
 
   --Runtime:addEventListener("enterFrame", backgroundMusic)
