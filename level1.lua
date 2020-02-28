@@ -155,6 +155,26 @@ function scene:create( event )
   end
   Runtime:addEventListener( "tap", rotatecat)
 
+
+  local secondsLeft = 5  -- 10 minutes * 60 seconds
+
+  local clockText = display.newText( "3", 1800, 1000, native.systemFont, 60 )
+  clockText:setFillColor( 1, 1, 1 )
+  local clockBG = display.newImageRect( uiGroup, "images/button.png",  200, 100 )
+  clockBG.x = 1800
+  clockBG.y = 1000
+  local function updateTime( event )
+    secondsLeft = secondsLeft - 1
+    local timeDisplay = string.format( "00:%02d", secondsLeft )
+    clockText.text = timeDisplay
+if (secondsLeft==0) then
+      clockText.alpha=0
+      clockBG.alpha=0
+end
+end
+local countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
+
+
   --prevents cat from moving before ten seconds have passed
   local function tapperCountdown( event )
     physics.start()
