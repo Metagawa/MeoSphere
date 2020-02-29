@@ -2,12 +2,16 @@ local composer = require("composer")
 
 local scene = composer.newScene()
 
+audio.reserveChannels(1)
 -- -----------------------------------------------------------------------------------
 -- Code outside of the scene event functions below will only be executed ONCE unless
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
 
 -- Initialize variables
+
+local shopBackgroundMusic
+
 local json = require("json")
 
 local scoresTable = {}
@@ -46,7 +50,7 @@ local function gotoMenu()
 end
 local function gotoLS()
   composer.gotoScene("game")
-  local backgroundMusic = audio.loadSound("sound/bgm1.mp3")
+  local backgroundMusic = audio.loadStream("sound/bgm1.mp3")
 
   local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 10000})
 end
@@ -105,6 +109,8 @@ function scene:create(event)
 
   lsButton:addEventListener("tap", gotoLS)
   shopButton:addEventListener("tap", gotoMenu)
+
+  shopBackgroundMusic = audio.loadSound("sound/bgm2.mp3")
 end
 
 -- show()
@@ -115,7 +121,9 @@ function scene:show(event)
   if (phase == "will") then
     -- Code here runs when the scene is still off screen (but is about to come on screen)
   elseif (phase == "did") then
-  -- Code here runs when the scene is entirely on screen
+    -- Code here runs when the scene is entirely on screen
+
+    audio.play(shopBackgroundMusic, {channel = 1, loops = -1})
   end
 end
 
@@ -137,6 +145,7 @@ end
 function scene:destroy(event)
   local sceneGroup = self.view
   -- Code here runs prior to the removal of scene's view
+  audio.dispose(shopBackgroundMusic)
 end
 
 -- -----------------------------------------------------------------------------------

@@ -2,6 +2,9 @@ local composer = require("composer")
 
 local scene = composer.newScene()
 
+math.randomseed(os.time())
+
+audio.reserveChannels(1)
 --------------------------------------------------------------------------------
 -- include Corona's "physics" library
 --------------------------------------------------------------------------------
@@ -13,7 +16,6 @@ physics.pause()
 physics.setGravity(0, 22)
 physics.setScale(80)
 physics.setDrawMode("normal")
-math.randomseed(os.time())
 
 -- -----------------------------------------------------------------------------------
 -- Code outside of the scene event functions below will only be executed ONCE unless
@@ -36,7 +38,18 @@ local secondsGame = 60
 local backGroup = display.newGroup()
 local mainGroup = display.newGroup()
 local uiGroup = display.newGroup()
-
+local enemiesDefeated = 0
+local backgroundMusic
+local nomSound
+local duckSound
+local oofSound
+local hurtSound
+local soundTable = {
+  nomSound = audio.loadSound("sound/nom.wav"), --https://freesound.org/people/xtrgamr/sounds/253615/
+  duckSound = audio.loadSound("sound/quack.wav"), --https://freesound.org/people/crazyduckman/sounds/185549/
+  oofSound = audio.loadSound("sound/oof1.mp3"), --http://soundbible.com/free-sound-effects-1.html
+  hurtSound = audio.loadSound("sound/hurt1.wav") --http://soundbible.com/free-sound-effects-1.html
+}
 display.setDefault("background", 72, 209, 204)
 display.setDefault("textureWrapX", "repeat")
 display.setDefault("textureWrapY", "repeat")
@@ -120,7 +133,6 @@ end
 --Collision
 --------------------------------------------------------------------------------
 --Adds collision rules to erase food when it contacts Catball and alter velocity, also removes enemies on contact
-enemiesDefeated = 0
 function onCollision(event)
   CBx, CBy = cat:getLinearVelocity()
   if (event.phase == "began") then
@@ -133,8 +145,7 @@ function onCollision(event)
       event.contact.isEnabled = false
       event.object2:removeSelf()
       event.object2 = nil
-      finishTest = audio.loadSound("sound/correct.swf.mp3")
-      audio.play(finishTest)
+      audio.play(soundTable["nomSound"])
     elseif
       event.object1.myName == "Catball" and event.object2.myName == "enemy" or
         event.object1.myName == "enemy" and event.object2.myName == "Catball"
@@ -144,14 +155,12 @@ function onCollision(event)
       event.contact.isEnabled = false
       event.object2:removeSelf()
       event.object2 = nil
-      finishTest = audio.loadSound("sound/correct.swf.mp3")
-      audio.play(finishTest)
+      audio.play(soundTable["duckSound"])
     elseif
       event.object1.myName == "Catball" and event.object2.myName == "floor" or
         event.object1.myName == "floor" and event.object2.myName == "Catball"
      then
-      finishTest = audio.loadSound("sound/correct.swf.mp3")
-      audio.play(finishTest)
+      audio.play(soundTable["oofSound"])
     elseif
       event.object1.myName == "Catball" and event.object2.myName == "obstacle" or
         event.object1.myName == "obstacle" and event.object2.myName == "Catball"
@@ -159,8 +168,7 @@ function onCollision(event)
       physics.pause()
       event.contact.isEnabled = false
       cat:setLinearVelocity(0, 0)
-      finishTest = audio.loadSound("sound/correct.swf.mp3")
-      audio.play(finishTest)
+      audio.play(soundTable["hurtSound"])
       timer.performWithDelay(300, gotoShop, 1)
     end
   end
@@ -234,6 +242,7 @@ function scene:create(event)
   function catballPosCalc(event)
     catballX = math.round(cat.x)
     catballY = math.round(cat.y)
+    totalDistance = catballX - 420
   end
 
   camera:insert(cat)
@@ -381,7 +390,7 @@ function scene:show(event)
       tapText.text = "Total Taps:  " .. tapCount
       speedText.text = "Power: " .. power
       distanceText.text = "Total Distance: " .. totalDistance
-      totalScore = ((power - tapCount * 5) + (foodEaten * 500) + (totalDistance * 10) / 2)
+      totalScore = math.round(((power - tapCount * 5) + (foodEaten * 500) + math.round(totalDistance / 5) / 2))
       scoreText.text = "Score: " .. totalScore
       posText.text = "^ " .. -catballY + 956 .. " > " .. catballX - 420
     end
@@ -402,6 +411,10 @@ function scene:show(event)
     sceneGroup:insert(mainGroup)
     sceneGroup:insert(backGroup)
     sceneGroup:insert(uiGroup)
+
+    --audio play
+    backgroundMusic = audio.loadStream("sound/bgm1.mp3")
+    audio.play(backgroundMusic, {channel = 1, loops = -1})
   end
 end
 
@@ -422,7 +435,6 @@ function scene:hide(event)
     Runtime:removeEventListener("tap", rotatecat)
     Runtime:removeEventListener("collision", onCollision)
     Runtime:removeEventListener("enterFrame", updateText)
-    Runtime:removeEventListener("enterFrame", audioTest)
     Runtime:removeEventListener("enterFrame", catballPosCalc)
     timer.cancel(endGameTimer)
     timer.cancel(gameTimeRemainingTimer)
@@ -436,6 +448,12 @@ end
 function scene:destroy(event)
   local sceneGroup = self.view
   -- Code here runs prior to the removal of scene's view
+  audio.dispose(backgroundMusic)
+
+  for s, v in pairs(soundTable) do
+    audio.dispose(soundTable[s])
+    soundTable[s] = nil
+  end
 end
 
 -- -----------------------------------------------------------------------------------
