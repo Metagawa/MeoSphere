@@ -1,6 +1,6 @@
 # MeoSphere
 
-This is the repository for the unnamed Misbits 2020 Game Project for UL Module CS4043 made with Corona Game Engine
+This is the repository for the Misbits 2020 Game Project, Meosphere, for UL Module CS4043 made with Corona Game Engine
 
 - [Latest Release](https://github.com/TomC17/Misbits-2D-Game-Project/releases/latest)
 
