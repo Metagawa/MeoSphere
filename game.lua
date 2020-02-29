@@ -113,7 +113,7 @@ local function tapperCountdown(event)
   lsButton:addEventListener("tap", gotoMenu)
   shopButton:addEventListener("tap", gotoShop)
   resetButton:addEventListener("tap", resetGame)
-  timer.performWithDelay(1000, gameTimeRemaining, secondsGame)
+  gameTimeRemainingTimer = timer.performWithDelay(1000, gameTimeRemaining, secondsGame)
 end
 
 --------------------------------------------------------------------------------
@@ -351,19 +351,19 @@ function scene:create(event)
   posText:setFillColor(0, 0, 0)
 
   --Clock UI Elements
-  clockText = display.newText("00:05", 1800, 1000, native.systemFont, 60)
-  clockText:setFillColor(1, 1, 1)
-  tapWarn = display.newText("TAP", 1800, 920, native.systemFont, 75)
-  tapWarn:setFillColor(1, 1, 1)
   clockBG = display.newImageRect(uiGroup, "images/red_button.png", 200, 200)
   clockBG.x = 1800
   clockBG.y = 950
+  clockText = display.newText(uiGroup, "00:05", 1800, 1000, native.systemFont, 60)
+  clockText:setFillColor(1, 1, 1)
+  tapWarn = display.newText("TAP", 1800, 920, native.systemFont, 75)
+  tapWarn:setFillColor(1, 1, 1)
 
-  gameClockText = display.newText("01:00", display.contentCenterX, 75, native.systemFont, 30)
-  gameClockText:setFillColor(0, 0, 0)
   gameClockBG = display.newImageRect(uiGroup, "images/white_button_dark.png", 200, 50)
   gameClockBG.x = display.contentCenterX
   gameClockBG.y = 75
+  gameClockText = display.newText(uiGroup, "01:00", display.contentCenterX, 75, native.systemFont, 30)
+  gameClockText:setFillColor(0, 0, 0)
 end
 
 -- show()
@@ -425,6 +425,8 @@ function scene:hide(event)
     Runtime:removeEventListener("enterFrame", audioTest)
     Runtime:removeEventListener("enterFrame", catballPosCalc)
     timer.cancel(endGameTimer)
+    timer.cancel(gameTimeRemainingTimer)
+    gameTimeRemainingTimer = nil
   elseif (phase == "did") then
   -- Code here runs immediately after the scene goes entirely off screen
   end
