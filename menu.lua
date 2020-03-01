@@ -9,16 +9,10 @@ display.setDefault("background", 0, 0, 0)
 -- -----------------------------------------------------------------------------------
 local function gotoGame()
   composer.gotoScene("game")
-  local backgroundMusic = audio.loadSound("sound/bgm1.mp3")
-
-  local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 10000})
 end
 
 local function gotoShop()
   composer.gotoScene("shop")
-  local backgroundMusic = audio.loadSound("sound/bgm2.mp3")
-
-  local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 2000})
 end
 
 -- -----------------------------------------------------------------------------------

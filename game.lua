@@ -2,6 +2,9 @@ local composer = require("composer")
 
 local scene = composer.newScene()
 
+math.randomseed(os.time())
+
+audio.reserveChannels(1)
 --------------------------------------------------------------------------------
 -- include Corona's "physics" library
 --------------------------------------------------------------------------------
@@ -13,7 +16,6 @@ physics.pause()
 physics.setGravity(0, 22)
 physics.setScale(80)
 physics.setDrawMode("normal")
-math.randomseed(os.time())
 
 -- -----------------------------------------------------------------------------------
 -- Code outside of the scene event functions below will only be executed ONCE unless
@@ -21,7 +23,6 @@ math.randomseed(os.time())
 -- -----------------------------------------------------------------------------------
 
 -- forward declarations and other locals
-local screenW, screenH, halfW = display.actualContentWidth, display.actualContentHeight, display.contentCenterX
 local tapCount = 0
 local power = 0
 local tapTimer
@@ -36,7 +37,14 @@ local secondsGame = 60
 local backGroup = display.newGroup()
 local mainGroup = display.newGroup()
 local uiGroup = display.newGroup()
-
+local enemiesDefeated = 0
+local backgroundMusic
+local soundTable = {
+  nomSound = audio.loadSound("sound/nom.wav"), --https://freesound.org/people/xtrgamr/sounds/253615/
+  duckSound = audio.loadSound("sound/quack.wav"), --https://freesound.org/people/crazyduckman/sounds/185549/
+  oofSound = audio.loadSound("sound/oof1.mp3"), --http://soundbible.com/free-sound-effects-1.html
+  hurtSound = audio.loadSound("sound/hurt1.wav") --http://soundbible.com/free-sound-effects-1.html
+}
 display.setDefault("background", 72, 209, 204)
 display.setDefault("textureWrapX", "repeat")
 display.setDefault("textureWrapY", "repeat")
@@ -48,7 +56,9 @@ cam.fill = {type = "image", filename = "images/sky.png"}
 cam.fill.scaleX = 0.0007
 cam.fill.scaleY = 0.0007
 
+-----------------------------------------------------
 --function declarations
+-----------------------------------------------------
 
 --function to go to main menu
 local function gotoMenu()
@@ -71,6 +81,44 @@ local function endGame()
   physics.stop()
   composer.gotoScene("shop")
   timer.cancel(endGameTimer)
+end
+
+local function resumeGame()
+  physics.start()
+  timer.resume(gameTimeRemainingTimer)
+  timer.resume(endGameTimer)
+  pauseButton.alpha = 1
+  pauseBG.alpha = 0
+  shopButton:removeEventListener("tap", gotoShop)
+  shopButton.alpha = 0
+  shopButtonText.alpha = 0
+  resetButton:removeEventListener("tap", resetGame)
+  resetButton.alpha = 0
+  resetButtonText.alpha = 0
+  lsButton:removeEventListener("tap", gotoMenu)
+  lsButton.alpha = 0
+  lsButtonText.alpha = 0
+  resumeButton:removeEventListener("tap", resumeGame)
+  resumeButton.alpha = 0
+end
+
+local function pauseGame()
+  physics.pause()
+  timer.pause(gameTimeRemainingTimer)
+  timer.pause(endGameTimer)
+  pauseButton.alpha = 0
+  pauseBG.alpha = 1
+  shopButton:addEventListener("tap", gotoShop)
+  shopButton.alpha = 1
+  shopButtonText.alpha = 1
+  resetButton:addEventListener("tap", resetGame)
+  resetButton.alpha = 1
+  resetButtonText.alpha = 1
+  lsButton:addEventListener("tap", gotoMenu)
+  lsButton.alpha = 1
+  lsButtonText.alpha = 1
+  resumeButton:addEventListener("tap", resumeGame)
+  resumeButton.alpha = 1
 end
 
 --this rotates the cat and shoots him to the right with increasing strength the more taps have occurred
@@ -110,9 +158,7 @@ end
 local function tapperCountdown(event)
   physics.start()
   Runtime:removeEventListener("tap", rotatecat)
-  lsButton:addEventListener("tap", gotoMenu)
-  shopButton:addEventListener("tap", gotoShop)
-  resetButton:addEventListener("tap", resetGame)
+  pauseButton:addEventListener("tap", pauseGame)
   gameTimeRemainingTimer = timer.performWithDelay(1000, gameTimeRemaining, secondsGame)
 end
 
@@ -120,7 +166,6 @@ end
 --Collision
 --------------------------------------------------------------------------------
 --Adds collision rules to erase food when it contacts Catball and alter velocity, also removes enemies on contact
-enemiesDefeated = 0
 function onCollision(event)
   CBx, CBy = cat:getLinearVelocity()
   if (event.phase == "began") then
@@ -133,8 +178,7 @@ function onCollision(event)
       event.contact.isEnabled = false
       event.object2:removeSelf()
       event.object2 = nil
-      finishTest = audio.loadSound("sound/correct.swf.mp3")
-      audio.play(finishTest)
+      audio.play(soundTable["nomSound"])
     elseif
       event.object1.myName == "Catball" and event.object2.myName == "enemy" or
         event.object1.myName == "enemy" and event.object2.myName == "Catball"
@@ -144,14 +188,12 @@ function onCollision(event)
       event.contact.isEnabled = false
       event.object2:removeSelf()
       event.object2 = nil
-      finishTest = audio.loadSound("sound/correct.swf.mp3")
-      audio.play(finishTest)
+      audio.play(soundTable["duckSound"])
     elseif
       event.object1.myName == "Catball" and event.object2.myName == "floor" or
         event.object1.myName == "floor" and event.object2.myName == "Catball"
      then
-      finishTest = audio.loadSound("sound/correct.swf.mp3")
-      audio.play(finishTest)
+      audio.play(soundTable["oofSound"])
     elseif
       event.object1.myName == "Catball" and event.object2.myName == "obstacle" or
         event.object1.myName == "obstacle" and event.object2.myName == "Catball"
@@ -159,8 +201,7 @@ function onCollision(event)
       physics.pause()
       event.contact.isEnabled = false
       cat:setLinearVelocity(0, 0)
-      finishTest = audio.loadSound("sound/correct.swf.mp3")
-      audio.play(finishTest)
+      audio.play(soundTable["hurtSound"])
       timer.performWithDelay(300, gotoShop, 1)
     end
   end
@@ -174,24 +215,45 @@ function scene:create(event)
   local sceneGroup = self.view
   -- Code here runs when the scene is first created but has not yet appeared on screen
 
-  --Button display code
+  --Pause menu display code
+  pauseBG = display.newImageRect(uiGroup, "images/white_button_dark.png", 900, 500)
+  pauseBG.x = display.contentCenterX
+  pauseBG.y = display.contentCenterY
+  pauseBG.alpha = 0
+
   lsButton = display.newImageRect(uiGroup, "images/white_button_dark.png", 300, 100)
-  lsButton.x = display.contentCenterX + 700
-  lsButton.y = 100
-  lsButtonText = display.newText(uiGroup, "Main Menu", display.contentCenterX + 700, 100, native.systemFont, 35)
+  lsButton.x = display.contentCenterX - 300
+  lsButton.y = 750
+  lsButton.alpha = 0
+  lsButtonText = display.newText(uiGroup, "Main Menu", display.contentCenterX - 300, 750, native.systemFont, 35)
   lsButtonText:setFillColor(0, 0, 0)
+  lsButtonText.alpha = 0
 
   shopButton = display.newImageRect(uiGroup, "images/white_button_dark.png", 300, 100)
-  shopButton.x = display.contentCenterX + 700
-  shopButton.y = 250
-  shopButtonText = display.newText(uiGroup, "Visit the Shop", display.contentCenterX + 700, 250, native.systemFont, 35)
+  shopButton.x = display.contentCenterX
+  shopButton.y = 750
+  shopButton.alpha = 0
+  shopButtonText = display.newText(uiGroup, "Visit the Shop", display.contentCenterX, 750, native.systemFont, 35)
   shopButtonText:setFillColor(0, 0, 0)
+  shopButtonText.alpha = 0
 
   resetButton = display.newImageRect(uiGroup, "images/white_button_dark.png", 300, 100)
-  resetButton.x = display.contentCenterX + 700
-  resetButton.y = 400
-  resetButtonText = display.newText(uiGroup, "Reset", display.contentCenterX + 700, 400, native.systemFont, 35)
+  resetButton.x = display.contentCenterX + 300
+  resetButton.y = 750
+  resetButton.alpha = 0
+  resetButtonText = display.newText(uiGroup, "Reset", display.contentCenterX + 300, 750, native.systemFont, 35)
   resetButtonText:setFillColor(0, 0, 0)
+  resetButtonText.alpha = 0
+
+  pauseButton = display.newImageRect(uiGroup, "images/pause.png", 90, 90)
+  pauseButton.x = display.contentCenterX + 800
+  pauseButton.y = 50
+  pauseButton.alpha = 1
+
+  resumeButton = display.newImageRect(uiGroup, "images/play.png", 50, 50)
+  resumeButton.x = display.contentCenterX + 800
+  resumeButton.y = 50
+  resumeButton.alpha = 0
 
   --adds a circle and skins a cat onto it
   cat = display.newImage(mainGroup, "images/cat.png", 500, 500)
@@ -234,6 +296,7 @@ function scene:create(event)
   function catballPosCalc(event)
     catballX = math.round(cat.x)
     catballY = math.round(cat.y)
+    totalDistance = catballX - 420
   end
 
   camera:insert(cat)
@@ -381,7 +444,7 @@ function scene:show(event)
       tapText.text = "Total Taps:  " .. tapCount
       speedText.text = "Power: " .. power
       distanceText.text = "Total Distance: " .. totalDistance
-      totalScore = ((power - tapCount * 5) + (foodEaten * 500) + (totalDistance * 10) / 2)
+      totalScore = math.round(((power - tapCount * 5) + (foodEaten * 500) + math.round(totalDistance / 5) / 2))
       scoreText.text = "Score: " .. totalScore
       posText.text = "^ " .. -catballY + 956 .. " > " .. catballX - 420
     end
@@ -402,6 +465,10 @@ function scene:show(event)
     sceneGroup:insert(mainGroup)
     sceneGroup:insert(backGroup)
     sceneGroup:insert(uiGroup)
+
+    --audio play
+    backgroundMusic = audio.loadStream("sound/bgm1.mp3")
+    audio.play(backgroundMusic, {channel = 1, loops = -1})
   end
 end
 
@@ -422,7 +489,6 @@ function scene:hide(event)
     Runtime:removeEventListener("tap", rotatecat)
     Runtime:removeEventListener("collision", onCollision)
     Runtime:removeEventListener("enterFrame", updateText)
-    Runtime:removeEventListener("enterFrame", audioTest)
     Runtime:removeEventListener("enterFrame", catballPosCalc)
     timer.cancel(endGameTimer)
     timer.cancel(gameTimeRemainingTimer)
@@ -436,6 +502,12 @@ end
 function scene:destroy(event)
   local sceneGroup = self.view
   -- Code here runs prior to the removal of scene's view
+  audio.dispose(backgroundMusic)
+
+  for s, v in pairs(soundTable) do
+    audio.dispose(soundTable[s])
+    soundTable[s] = nil
+  end
 end
 
 -- -----------------------------------------------------------------------------------
