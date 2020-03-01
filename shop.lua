@@ -1,4 +1,5 @@
 local composer = require("composer")
+local saving = require("saving")
 
 local scene = composer.newScene()
 
@@ -11,6 +12,7 @@ audio.reserveChannels(1)
 -- Initialize variables
 
 local shopBackgroundMusic
+local uiGroup = display.newGroup()
 
 local json = require("json")
 
@@ -23,17 +25,17 @@ local function loadScores()
 
   if file then
     local contents = file:read("*a")
-    io.close(file)
     scoresTable = json.decode(contents)
+    io.close(file)
   end
 
   if (scoresTable == nil or #scoresTable == 0) then
-    scoresTable = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+    scoresTable = {0}
   end
 end
 
 local function saveScores()
-  for i = #scoresTable, 11, -1 do
+  for i = #scoresTable, 2, -1 do
     table.remove(scoresTable, i)
   end
 
@@ -55,6 +57,26 @@ local function gotoLS()
   local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 10000})
 end
 
+local function addUpgrade1()
+  if scoresTable[1] >= 1000 then
+    scoresTable[1] = scoresTable[1] - 1000
+    upgrade1 = true
+    upgradeBtn1.alpha = 0.5
+    upgradeBtn1:removeEventListener("tap", addUpgrade1)
+    -- Save the scores
+    saveScores()
+  else
+    display.newText(
+      uiGroup,
+      "You don't have enough!",
+      display.contentCenterX,
+      display.contentCenterX,
+      native.systemfont,
+      70
+    )
+  end
+end
+
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
@@ -64,6 +86,34 @@ function scene:create(event)
   local sceneGroup = self.view
   -- Code here runs when the scene is first created but has not yet appeared on screen
 
+  local loadedUpgrades = saving.loadTable("upgrades.json")
+  if (upgrade1 == true) then
+    local upgradesActive = {
+      upgrade1 = true
+    }
+    saving.saveTable(upgradesActive, "upgrades.json")
+  else
+    local upgradesActive = {
+      upgrade1 = false
+    }
+    saving.saveTable(upgradesActive, "upgrades.json")
+  end
+
+  shopBG = display.newImageRect(uiGroup, "images/red_button_dark.png", 1200, 600)
+  shopBG.x = display.contentCenterX
+  shopBG.y = display.contentCenterY - 100
+  shopBG.alpha = 0.5
+
+  upgradeBtn1 = display.newImageRect(uiGroup, "images/red_button.png", 100, 100)
+  upgradeBtn1.x = display.contentCenterX - 500
+  upgradeBtn1.y = display.contentCenterY - 300
+
+  if (upgrade1 == true) then
+    upgradeBtn1.alpha = 0.5
+    upgradeBtn1:removeEventListener("tap", addUpgrade1)
+  else
+    upgradeBtn1:addEventListener("tap", addUpgrade1)
+  end
   -- Load the previous scores
   loadScores()
 
@@ -111,6 +161,8 @@ function scene:create(event)
   shopButton:addEventListener("tap", gotoMenu)
 
   shopBackgroundMusic = audio.loadSound("sound/bgm2.mp3")
+
+  sceneGroup:insert(uiGroup)
 end
 
 -- show()

@@ -1,7 +1,7 @@
 local composer = require("composer")
-
+local saving = require("saving")
+local loadedUpgrades = saving.loadTable("upgrades.json")
 local scene = composer.newScene()
-
 math.randomseed(os.time())
 
 audio.reserveChannels(1)
@@ -123,7 +123,11 @@ end
 
 --this rotates the cat and shoots him to the right with increasing strength the more taps have occurred
 local function rotatecat()
-  tapCount = tapCount + 1
+  if (upgrade1 == true) then
+    tapCount = tapCount + 2
+  else
+    tapCount = tapCount + 1
+  end
   local tapText = tapCount
   cat:applyForce(power, -power, cat.x, cat.y)
   cat:applyAngularImpulse(500)
@@ -214,7 +218,6 @@ end
 function scene:create(event)
   local sceneGroup = self.view
   -- Code here runs when the scene is first created but has not yet appeared on screen
-
   --Pause menu display code
   pauseBG = display.newImageRect(uiGroup, "images/white_button_dark.png", 900, 500)
   pauseBG.x = display.contentCenterX
