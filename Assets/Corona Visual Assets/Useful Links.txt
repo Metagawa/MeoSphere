@@ -7,5 +7,6 @@ Free 2D Assets made for various Corona Labs Demos
 Free Assets
 - https://www.gameart2d.com/freebies.html
 
-Space Free Assets (Seems like good asset website) .
+Space & Enemy Free Assets (Seems like good asset website) .
 - https://opengameart.org/content/space-game-starter-set
+- https://opengameart.org/content/platformersidescroller-characters-and-enemies
