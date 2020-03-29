@@ -34,15 +34,15 @@ function scene:create(event)
   local gameButton = display.newImageRect(sceneGroup, "images/white_button_dark.png", 400, 100)
   gameButton.x = display.contentCenterX
   gameButton.y = 800
-  local gameButtonText =
-    display.newText(sceneGroup, "Start the Game", display.contentCenterX, 800, native.systemFont, 44)
+  local gameButtonText = 
+  display.newText(sceneGroup, "Start the Game", display.contentCenterX, 800, native.systemFont, 44)
   gameButtonText:setFillColor(0, 0, 0)
 
   local shopButton = display.newImageRect(sceneGroup, "images/white_button_dark.png", 400, 100)
   shopButton.x = display.contentCenterX
   shopButton.y = 910
-  local shopButtonText =
-    display.newText(sceneGroup, "Visit the Shop", display.contentCenterX, 910, native.systemFont, 44)
+  local shopButtonText = 
+  display.newText(sceneGroup, "Visit the Shop", display.contentCenterX, 910, native.systemFont, 44)
   shopButtonText:setFillColor(0, 0, 0)
 
   gameButton:addEventListener("tap", gotoGame)
@@ -57,7 +57,7 @@ function scene:show(event)
   if (phase == "will") then
     -- Code here runs when the scene is still off screen (but is about to come on screen)
   elseif (phase == "did") then
-  -- Code here runs when the scene is entirely on screen
+    -- Code here runs when the scene is entirely on screen
   end
 end
 
