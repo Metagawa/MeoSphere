@@ -118,7 +118,6 @@ local function resumeGame()
   foodText.alpha = 0
   speedText.alpha = 0
   distanceText.alpha = 0
-  scoreText.alpha = 0
 end
 
 local function pauseGame()
@@ -141,7 +140,6 @@ local function pauseGame()
   foodText.alpha = 1
   speedText.alpha = 1
   distanceText.alpha = 1
-  scoreText.alpha = 1
 end
 
 --this rotates the cat and shoots him to the right with increasing strength the more taps have occurred
@@ -177,11 +175,30 @@ end
 
 local function gameTimeRemaining(event)
   secondsGame = secondsGame - 1
-  local gameTimeDisplay = secondsGame
-  gameClockText.text = gameTimeDisplay
+  gameClockText.text = secondsGame
   if (secondsGame == 0) then
     gameClockText.alpha = 0
     gameClockBG.alpha = 0
+  end
+end
+
+dasbootuses = 3
+local function dasboot(event)
+  cat:setLinearVelocity(5000, - 5000)
+  dasbootuses = dasbootuses - 1
+  if (dasbootuses < 1) then
+    dasbooticon:removeEventListener("tap", dasboot)
+    dasbooticon.alpha = 0.5
+  end
+end
+
+catnipuses = 1
+local function catnip(event)
+  catnipuses = catnipuses - 1
+  dasbootuses=3
+  if (catnipuses < 1) then
+    catnipicon:removeEventListener("tap", catnip)
+    catnipicon.alpha = 0.5
   end
 end
 
@@ -190,8 +207,11 @@ local function tapperCountdown(event)
   physics.start()
   Runtime:removeEventListener("tap", rotatecat)
   pauseButton:addEventListener("tap", pauseGame)
+  dasbooticon:addEventListener("tap", dasboot)
+  catnipicon:addEventListener("tap", catnip)
   gameTimeRemainingTimer = timer.performWithDelay(1000, gameTimeRemaining, secondsGame)
 end
+
 
 --------------------------------------------------------------------------------
 --Collision
@@ -214,7 +234,7 @@ function onCollision(event)
       else
         foodEaten = foodEaten + 1
       end
-      cat:setLinearVelocity(3000, (-foodEaten * 10) - 2500)
+      cat:setLinearVelocity((CBx + power), - 500 - (CBy + power))
       event.contact.isEnabled = false
       event.object2:removeSelf()
       event.object2 = nil
@@ -295,6 +315,16 @@ function onCollision(event)
         resumeButton.y = 50
         resumeButton.alpha = 0
 
+        dasbooticon = display.newImageRect(uiGroup, "images/dasboot.png", 100, 100)
+        dasbooticon.x = display.contentCenterX + 850
+        dasbooticon.y = 1000
+        dasbooticon.alpha = 1
+
+        catnipicon = display.newImageRect(uiGroup, "images/catnip.png", 100, 100)
+        catnipicon.x = display.contentCenterX + 850
+        catnipicon.y = 850
+        catnipicon.alpha = 1
+
         --adds a circle and skins a cat onto it
         cat = display.newImage(mainGroup, "images/cat.png", 500, 500)
         cat:scale(0.53, 0.53)
@@ -305,7 +335,7 @@ function onCollision(event)
         --adds physics to Catball and gives him circle physics.
         physics.addBody(cat, {radius = 72, density = 1, friction = 0.5, bounce = .6})
         cat.myName = "Catball"
-        cat.linearDamping = .15
+        cat.linearDamping = .35
         cat.angularDamping = .05
 
         --------------------------------------------------------------------------------
@@ -350,7 +380,7 @@ function onCollision(event)
         floor.x, floor.y = 0, 1078
         floor.alpha = 0
         floor.isHitTestable = true
-        physics.addBody(floor, "static", {friction = 1.0, bounce = -1})
+        physics.addBody(floor, "static", {friction = 999, bounce = 0})
         floor.myName = "floor"
 
         local wall = display.newRect(0, 600, 1, 500000)
@@ -362,9 +392,9 @@ function onCollision(event)
         --------------------------------------------------------------------------------
         -- Food Spawns
         --------------------------------------------------------------------------------
-        --foodXSpawn set to 1000 pixels
+        --foodXSpawn set to 650 pixels
         local foodXSpawn = 650
-        local foodSpacer = 750
+        local foodSpacer = 1200
         --food spawned for 500 of each item over an increasing distance.
         local food = {}
         for i = 1, 500 do
@@ -372,24 +402,24 @@ function onCollision(event)
           food1:scale(0.3, 0.3)
           physics.addBody(food1, "static", {radius = 65, density = 0, friction = 1, bounce = 0.5})
           food1.myName = "food"
-          food1.x = foodXSpawn + foodSpacer * 1.1
+          food1.x = foodXSpawn + foodSpacer * 1.3
           food1.y = 985
           foodXSpawn = foodXSpawn + 600
           local food2 = display.newImage(mainGroup, "images/food2.png")
           food2:scale(0.5, 0.5)
           physics.addBody(food2, "static", {radius = 90, density = 0, friction = 1, bounce = 0.5})
           food2.myName = "food"
-          food2.x = foodXSpawn + foodSpacer * 1.4
+          food2.x = foodXSpawn + foodSpacer * 1.6
           food2.y = 960
           foodXSpawn = foodXSpawn + 600
           local food3 = display.newImage(mainGroup, "images/food3.png")
           food3:scale(0.7, 0.7)
           physics.addBody(food3, "static", {radius = 70, density = 0, friction = 1, bounce = 0.5})
           food3.myName = "food"
-          food3.x = foodXSpawn + foodSpacer * 1.6
+          food3.x = foodXSpawn + foodSpacer * 1.8
           food3.y = 970
-          foodXSpawn = foodXSpawn + foodSpacer * 1.2
-          foodSpacer = foodSpacer * 1.05
+          foodXSpawn = foodXSpawn + foodSpacer * 1.3
+          foodSpacer = foodSpacer * 1.25
           camera:insert(food1)
           camera:insert(food2)
           camera:insert(food3)
@@ -405,7 +435,7 @@ function onCollision(event)
           enemy[i]:scale(0.5, 0.5)
           physics.addBody(enemy[i], "static", {radius = 50, density = 1, friction = 1, bounce = 2})
           enemy[i].x = 4000 + math.random(display.screenOriginX, display.contentWidth * 200)
-          enemy[i].y = -19500 + math.random(display.screenOriginY, display.contentHeight * 18)
+          enemy[i].y = -21500 + math.random(display.screenOriginY, display.contentHeight * 18)
           enemy[i].myName = "enemy"
           camera:insert(enemy[i])
         end
@@ -422,12 +452,24 @@ function onCollision(event)
         --------------------------------------------------------------------------------
         -- Obstacle spawns
         --------------------------------------------------------------------------------
-        local obstacleXSpawn = 2650
+        local obstacleXSpawn = 26500
         local obstacleSpacer = 2750
 
 
-
         local obstacle = {}
+
+        for i = 1, 25 do
+          local obstacle1 = display.newImage(mainGroup, "images/spikes.png")
+          obstacle1:scale(0.5, 0.5)
+          physics.addBody(obstacle1, "static", {radius = 90, density = 50, friction = 1, bounce = 0})
+          obstacle1.myName = "obstacle"
+          obstacle1.x = obstacleXSpawn + obstacleSpacer * 1.2
+          obstacle1.y = 970
+          obstacleXSpawn = obstacleXSpawn + math.random(500, 500)
+          obstacleXSpawn = obstacleXSpawn + obstacleSpacer * 1.4
+          obstacleSpacer = obstacleSpacer * 1.1
+          camera:insert(obstacle1)
+        end
 
         for i = 1, 50 do
           obstacle[i] = display.newImage(mainGroup, "images/spikeball.png")
@@ -457,7 +499,7 @@ function onCollision(event)
         foodText:setFillColor(0, 0, 0)
         foodText.alpha = 0
 
-        tapText = display.newText(uiGroup, "Total taps:  " .. tapCount, 500, 40, native.systemFont, 36)
+        tapText = display.newText(uiGroup, "Total taps:  " .. tapCount, 500, 80, native.systemFont, 36)
         tapText:setFillColor(0, 0, 0)
 
         speedText = display.newText(uiGroup, "Power: " .. power, display.contentCenterX, 300, native.systemFont, 36)
@@ -468,21 +510,27 @@ function onCollision(event)
         distanceText:setFillColor(0, 0, 0)
         distanceText.alpha = 0
 
-        scoreText = display.newText(uiGroup, "Score: " .. totalScore - 420, display.contentCenterX, 380, native.systemFont, 36)
+        scoreText = display.newText(uiGroup, "Score: " .. totalScore - 420, 500, 120, native.systemFont, 36)
         scoreText:setFillColor(0, 0, 0)
-        scoreText.alpha = 0
+        scoreText.alpha = 1
 
-
-        posText = display.newText(uiGroup, "^ " .. catballY .. " > " .. catballX, 500, 80, native.systemFont, 36)
+        posText = display.newText(uiGroup, "^ " .. catballY .. " > " .. catballX, 500, 40, native.systemFont, 36)
         posText:setFillColor(0, 0, 0)
 
+        dasbootusesText = display.newText(uiGroup, "x"..dasbootuses, display.contentCenterX + 900, 970, native.systemFont, 36)
+        dasbootusesText:setFillColor(0, 0, 0)
+
+        catnipusesText = display.newText(uiGroup, "x"..catnipuses, display.contentCenterX + 900, 850, native.systemFont, 36)
+        catnipusesText:setFillColor(0, 0, 0)
+
+
         --Clock UI Elements
-        clockBG = display.newImageRect(uiGroup, "images/red_button.png", 200, 350)
-        clockBG.x = 1800
-        clockBG.y = 950
-        clockText = display.newText(uiGroup, "5", 1800, 1000, native.systemFont, 60)
+        clockBG = display.newImageRect(uiGroup, "images/button_blue_dark.png", 900, 800)
+        clockBG.x = display.contentCenterX
+        clockBG.y = display.contentCenterY - 100
+        clockText = display.newText(uiGroup, "5", display.contentCenterX, display.contentCenterY, native.systemFont, 125)
         clockText:setFillColor(1, 1, 1)
-        tapWarn = display.newText("TAP", 1800, 920, native.systemFont, 75)
+        tapWarn = display.newText("TAP NOW!", display.contentCenterX, display.contentCenterY - 200, native.systemFont, 150)
         tapWarn:setFillColor(1, 1, 1)
 
         gameClockBG = display.newImageRect(uiGroup, "images/white_button_dark.png", 200, 100)
@@ -507,6 +555,8 @@ function onCollision(event)
             tapText.text = "Total Taps:  " .. tapCount
             speedText.text = "Power: " .. power
             distanceText.text = "Total Distance: " .. totalDistance
+            dasbootusesText.text = "x"..dasbootuses
+            catnipusesText.text = "x"..catnipuses
             totalScore = math.round((tapCount * 5) + (foodEaten * 500) + (enemiesDefeated * 1000) + (totalDistance / 2))
             scoreText.text = "Score: " .. totalScore
             posText.text = "^ " .. - catballY + 956 .. " > " .. catballX - 420
