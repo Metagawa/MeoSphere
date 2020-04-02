@@ -8,17 +8,28 @@ settings =
 	win32 =
 	{
 			preferenceStorage = "sqlite",
-	}}
+	},
 	window =
 	{
+
+	titleText =
+	{
+	default = "MeoSphere - The Adventures of CatBall",
+	["en-us"] = "MeoSphere - The Adventures of CatBall",
+		["en-gb"] = "MeoSphere - The Adventures of CatBall",
+			["en"] = "MeoSphere - The Adventures of CatBall",
+				["fr"] = "MeoSphere - The Adventures of CatBall",
+					["es"] = "MeoSphere - The Adventures of CatBall",
+	},
 		defaultMode = "windowed",
-		defaultViewWidth = 1920,
-		defaultViewHeight = 1080,
-		resizable = true,
+		defaultViewWidth = 1280,
+		defaultViewHeight = 720,
+		resizable = false,
 		minViewWidth = 480,
 		minViewHeight = 320,
 		enableCloseButton = true,
 		enableMinimizeButton = true,
 		enableMaximizeButton = true,
 		suspendWhenMinimized= true,
-	}
+	},
+}

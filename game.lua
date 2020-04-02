@@ -86,7 +86,7 @@ end
 
 --function to reset the game
 local function resetGame()
-  composer.gotoScene("tips")
+  composer.gotoScene("reset")
 end
 
 --function to end the game
@@ -196,6 +196,8 @@ catnipuses = 1
 local function catnip(event)
   catnipuses = catnipuses - 1
   dasbootuses=3
+  dasbooticon:addEventListener("tap", dasboot)
+  dasbooticon.alpha = 1
   if (catnipuses < 1) then
     catnipicon:removeEventListener("tap", catnip)
     catnipicon.alpha = 0.5
@@ -321,7 +323,7 @@ function onCollision(event)
         dasbooticon.alpha = 1
 
         catnipicon = display.newImageRect(uiGroup, "images/catnip.png", 100, 100)
-        catnipicon.x = display.contentCenterX + 850
+        catnipicon.x = display.contentCenterX + 840
         catnipicon.y = 850
         catnipicon.alpha = 1
 
@@ -382,10 +384,6 @@ function onCollision(event)
         floor.isHitTestable = true
         physics.addBody(floor, "static", {friction = 999, bounce = 0})
         floor.myName = "floor"
-
-        local wall = display.newRect(0, 600, 1, 500000)
-        wall.x, wall.y = 0, 1080
-        physics.addBody(wall, "static", {friction = 1.5, bounce = 0.5})
 
         camera:insert(floor)
 
@@ -565,7 +563,7 @@ function onCollision(event)
           --Needed listeners and timers
           timer.performWithDelay(1000, updateTime, secondsLeft)
           timer.performWithDelay(5000, tapperCountdown)
-          endGameTimer = timer.performWithDelay(65000, endGame)
+          endGameTimer = timer.performWithDelay(secondsGame*1000+5000, endGame)
           Runtime:addEventListener("tap", rotatecat)
           Runtime:addEventListener("enterFrame", updateText)
           Runtime:addEventListener("enterFrame", moveCamera)
