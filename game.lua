@@ -59,12 +59,12 @@ display.setDefault("textureWrapY", "repeat")
   cam.fill.scaleY = 0.0007
 
 --Timer Upgrade conditions
-if (upgrade7 == true) then
-  secondsGame = secondsGame + 30
+if (upgrade9 == true) then
+  secondsGame = secondsGame + 240
 elseif (upgrade8 == true) then
   secondsGame = secondsGame + 120
-elseif (upgrade9 == true) then
-  secondsGame = secondsGame + 240
+elseif (upgrade7 == true) then
+  secondsGame = secondsGame + 30
 end
 
 -----------------------------------------------------
