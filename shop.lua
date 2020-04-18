@@ -204,14 +204,14 @@ function scene:create(event)
   background.x = display.contentCenterX
   background.y = display.contentCenterY
 
-  local upgradeBtn1Text = 
+  local upgradeBtn1Text =
   display.newText(
     sceneGroup,
     "500",
     display.contentCenterX - 750,
     display.contentCenterY - 200,
-    native.systemFont,
-    44
+    native.newFont "Emulogic.ttf",
+    25
   )
   upgradeBtn1Text:setFillColor(0, 0, 0)
 
@@ -219,112 +219,112 @@ function scene:create(event)
   upgradeBtn1.x = display.contentCenterX - 620
   upgradeBtn1.y = display.contentCenterY - 200
 
-  local upgradeBtn2Text = 
+  local upgradeBtn2Text =
   display.newText(
     sceneGroup,
     "15000",
     display.contentCenterX - 750,
     display.contentCenterY - 50,
-    native.systemFont,
-    44
+    native.newFont "Emulogic.ttf",
+    25
   )
   upgradeBtn2Text:setFillColor(0, 0, 0)
   upgradeBtn2 = display.newImageRect(uiGroup, "images/upg-clickboost2.png", 125, 125)
   upgradeBtn2.x = display.contentCenterX - 620
   upgradeBtn2.y = display.contentCenterY - 50
 
-  local upgradeBtn3Text = 
+  local upgradeBtn3Text =
   display.newText(
     sceneGroup,
     "45000",
     display.contentCenterX - 750,
     display.contentCenterY + 100,
-    native.systemFont,
-    44
+    native.newFont "Emulogic.ttf",
+    25
   )
   upgradeBtn3Text:setFillColor(0, 0, 0)
   upgradeBtn3 = display.newImageRect(uiGroup, "images/upg-clickboost3.png", 125, 125)
   upgradeBtn3.x = display.contentCenterX - 620
   upgradeBtn3.y = display.contentCenterY + 100
 
-  local upgradeBtn4Text = 
+  local upgradeBtn4Text =
   display.newText(
     sceneGroup,
     "5000",
     display.contentCenterX - 470,
     display.contentCenterY - 200,
-    native.systemFont,
-    44
+    native.newFont "Emulogic.ttf",
+    25
   )
   upgradeBtn4Text:setFillColor(0, 0, 0)
   upgradeBtn4 = display.newImageRect(uiGroup, "images/upg-foodboost1.png", 125, 125)
   upgradeBtn4.x = display.contentCenterX - 320
   upgradeBtn4.y = display.contentCenterY - 200
 
-  local upgradeBtn5Text = 
+  local upgradeBtn5Text =
   display.newText(
     sceneGroup,
     "20000",
     display.contentCenterX - 470,
     display.contentCenterY - 50,
-    native.systemFont,
-    44
+    native.newFont "Emulogic.ttf",
+    25
   )
   upgradeBtn5Text:setFillColor(0, 0, 0)
   upgradeBtn5 = display.newImageRect(uiGroup, "images/upg-foodboost2.png", 125, 125)
   upgradeBtn5.x = display.contentCenterX - 320
   upgradeBtn5.y = display.contentCenterY - 50
 
-  local upgradeBtn6Text = 
+  local upgradeBtn6Text =
   display.newText(
     sceneGroup,
     "50000",
     display.contentCenterX - 470,
     display.contentCenterY + 100,
-    native.systemFont,
-    44
+    native.newFont "Emulogic.ttf",
+    25
   )
   upgradeBtn6Text:setFillColor(0, 0, 0)
   upgradeBtn6 = display.newImageRect(uiGroup, "images/upg-foodboost3.png", 125, 125)
   upgradeBtn6.x = display.contentCenterX - 320
   upgradeBtn6.y = display.contentCenterY + 100
 
-  local upgradeBtn7Text = 
+  local upgradeBtn7Text =
   display.newText(
     sceneGroup,
     "10000",
     display.contentCenterX - 175,
     display.contentCenterY - 200,
-    native.systemFont,
-    44
+    native.newFont "Emulogic.ttf",
+    25
   )
   upgradeBtn7Text:setFillColor(0, 0, 0)
   upgradeBtn7 = display.newImageRect(uiGroup, "images/upg-scoreboost1.png", 125, 125)
   upgradeBtn7.x = display.contentCenterX - 20
   upgradeBtn7.y = display.contentCenterY - 200
 
-  local upgradeBtn8Text = 
+  local upgradeBtn8Text =
   display.newText(
     sceneGroup,
     "25000",
     display.contentCenterX - 175,
     display.contentCenterY - 50,
-    native.systemFont,
-    44
+    native.newFont "Emulogic.ttf",
+    25
   )
   upgradeBtn8Text:setFillColor(0, 0, 0)
   upgradeBtn8 = display.newImageRect(uiGroup, "images/upg-scoreboost2.png", 125, 125)
   upgradeBtn8.x = display.contentCenterX - 20
   upgradeBtn8.y = display.contentCenterY - 50
 
-  local upgradeBtn9Text = 
+  local upgradeBtn9Text =
   display.newText(
     sceneGroup,
     "75000",
     display.contentCenterX - 175,
     display.contentCenterY + 100,
-    native.systemFont,
-    44
+    native.newFont "Emulogic.ttf",
+    25
   )
   upgradeBtn9Text:setFillColor(0, 0, 0)
   upgradeBtn9 = display.newImageRect(uiGroup, "images/upg-scoreboost3.png", 125, 125)
@@ -412,8 +412,8 @@ function scene:create(event)
     upgradeBtn9:addEventListener("tap", addUpgrade9)
   end
 
-  local titleHeader = 
-  display.newText(sceneGroup, "Current Total: " .. carriedScore, display.contentCenterX, 50, native.systemFont, 44)
+  local titleHeader =
+  display.newText(sceneGroup, "Current Total: " .. carriedScore, display.contentCenterX, 50, native.newFont "Emulogic.ttf", 25)
   local function updateTitleHeader()
     titleHeader.text = "Current Total: " .. carriedScore
   end
@@ -423,15 +423,15 @@ function scene:create(event)
   local gameButton = display.newImageRect(sceneGroup, "images/white_button_dark.png", 350, 100)
   gameButton.x = display.contentCenterX - 500
   gameButton.y = 850
-  local gameButtonText = 
-  display.newText(sceneGroup, "Start the Game", display.contentCenterX - 500, 850, native.systemFont, 44)
+  local gameButtonText =
+  display.newText(sceneGroup, "Start the Game", display.contentCenterX - 500, 850, native.newFont "Emulogic.ttf", 20)
   gameButtonText:setFillColor(0, 0, 0)
 
   local menuButton = display.newImageRect(sceneGroup, "images/white_button_dark.png", 350, 100)
   menuButton.x = display.contentCenterX - 100
   menuButton.y = 850
-  local menuButtonText = 
-  display.newText(sceneGroup, "Main Menu", display.contentCenterX - 100, 850, native.systemFont, 44)
+  local menuButtonText =
+  display.newText(sceneGroup, "Main Menu", display.contentCenterX - 100, 850, native.newFont "Emulogic.ttf", 20)
   menuButtonText:setFillColor(0, 0, 0)
 
   gameButton:addEventListener("tap", gotoLS)
@@ -458,13 +458,13 @@ function scene:create(event)
     if (scoresTable[i]) then
       local yPos = 150 + (i * 56)
 
-      local rankNum = 
-      display.newText(sceneGroup, i .. ")", display.contentCenterX + 570, yPos + 75, native.systemFont, 45)
+      local rankNum =
+      display.newText(sceneGroup, i .. ")", display.contentCenterX + 570, yPos + 75, native.newFont "Emulogic.ttf", 30)
       rankNum:setFillColor(0)
       rankNum.anchorX = 1
 
-      local thisScore = 
-      display.newText(sceneGroup, scoresTable[i], display.contentCenterX + 600, yPos + 75, native.systemFont, 45)
+      local thisScore =
+      display.newText(sceneGroup, scoresTable[i], display.contentCenterX + 600, yPos + 75, native.newFont "Emulogic.ttf", 30)
       thisScore:setFillColor(0)
       thisScore.anchorX = 0
     end
