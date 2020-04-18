@@ -31,19 +31,19 @@ function scene:create(event)
   title.x = display.contentCenterX
   title.y = 300
 
-  local gameButton = display.newImageRect(sceneGroup, "images/white_button_dark.png", 400, 100)
+  local gameButton = display.newImageRect(sceneGroup, "images/shop button template.png", 500, 100)
   gameButton.x = display.contentCenterX
   gameButton.y = 800
   local gameButtonText =
   display.newText(sceneGroup, "Start the Game", display.contentCenterX, 800, native.newFont "Emulogic.ttf", 20)
-  gameButtonText:setFillColor(0, 0, 0)
+  gameButtonText:setFillColor(1, 1, 1)
 
-  local shopButton = display.newImageRect(sceneGroup, "images/white_button_dark.png", 400, 100)
+  local shopButton = display.newImageRect(sceneGroup, "images/shop button template.png", 500, 100)
   shopButton.x = display.contentCenterX
   shopButton.y = 910
   local shopButtonText =
   display.newText(sceneGroup, "Visit the Shop", display.contentCenterX, 910, native.newFont "Emulogic.ttf", 20)
-  shopButtonText:setFillColor(0, 0, 0)
+  shopButtonText:setFillColor(1, 1, 1)
 
   gameButton:addEventListener("tap", gotoGame)
   shopButton:addEventListener("tap", gotoShop)

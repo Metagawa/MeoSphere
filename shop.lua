@@ -420,19 +420,19 @@ function scene:create(event)
 
   Runtime:addEventListener("enterFrame", updateTitleHeader)
 
-  local gameButton = display.newImageRect(sceneGroup, "images/white_button_dark.png", 350, 100)
+  local gameButton = display.newImageRect(sceneGroup,  "images/shop button template.png", 500, 100)
   gameButton.x = display.contentCenterX - 500
   gameButton.y = 850
   local gameButtonText =
   display.newText(sceneGroup, "Start the Game", display.contentCenterX - 500, 850, native.newFont "Emulogic.ttf", 20)
-  gameButtonText:setFillColor(0, 0, 0)
+  gameButtonText:setFillColor(1, 1, 1)
 
-  local menuButton = display.newImageRect(sceneGroup, "images/white_button_dark.png", 350, 100)
+  local menuButton = display.newImageRect(sceneGroup,  "images/shop button template.png", 500, 100)
   menuButton.x = display.contentCenterX - 100
   menuButton.y = 850
   local menuButtonText =
   display.newText(sceneGroup, "Main Menu", display.contentCenterX - 100, 850, native.newFont "Emulogic.ttf", 20)
-  menuButtonText:setFillColor(0, 0, 0)
+  menuButtonText:setFillColor(1, 1, 1)
 
   gameButton:addEventListener("tap", gotoLS)
   menuButton:addEventListener("tap", gotoMenu)

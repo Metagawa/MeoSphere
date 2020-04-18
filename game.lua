@@ -303,7 +303,7 @@ function onCollision(event)
           lsButton.x = display.contentCenterX - 300
           lsButton.y = 750
           lsButton.alpha = 0
-          lsButtonText = display.newText(uiGroup, "Main Menu", display.contentCenterX - 300, 750, native.newFont "Emulogic.ttf", 30)
+          lsButtonText = display.newText(uiGroup, "Main Menu", display.contentCenterX - 300, 750, native.newFont "Emulogic.ttf", 25)
           lsButtonText:setFillColor(0, 0, 0)
           lsButtonText.alpha = 0
 
@@ -311,7 +311,7 @@ function onCollision(event)
           shopButton.x = display.contentCenterX
           shopButton.y = 750
           shopButton.alpha = 0
-          shopButtonText = display.newText(uiGroup, "High Scores", display.contentCenterX, 750, native.newFont "Emulogic.ttf", 30)
+          shopButtonText = display.newText(uiGroup, "High Scores", display.contentCenterX, 750, native.newFont "Emulogic.ttf", 25)
           shopButtonText:setFillColor(0, 0, 0)
           shopButtonText.alpha = 0
 
@@ -319,7 +319,7 @@ function onCollision(event)
           resetButton.x = display.contentCenterX + 300
           resetButton.y = 750
           resetButton.alpha = 0
-          resetButtonText = display.newText(uiGroup, "Reset", display.contentCenterX + 300, 750, native.newFont "Emulogic.ttf", 30)
+          resetButtonText = display.newText(uiGroup, "Reset", display.contentCenterX + 300, 750, native.newFont "Emulogic.ttf", 25)
           resetButtonText:setFillColor(0, 0, 0)
           resetButtonText.alpha = 0
 
@@ -529,7 +529,7 @@ function onCollision(event)
 
 
           --Clock UI Elements
-          clockBG = display.newImageRect(uiGroup, "images/button_blue_dark.png", 900, 800)
+          clockBG = display.newImageRect(uiGroup, "images/shop button template.png", 1300, 700)
           clockBG.x = display.contentCenterX
           clockBG.y = display.contentCenterY - 100
           clockText = display.newText(uiGroup, "5", display.contentCenterX, display.contentCenterY, native.newFont "Emulogic.ttf", 75)
