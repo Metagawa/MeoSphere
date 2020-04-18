@@ -41,7 +41,8 @@ local soundTable = {
   nomSound = audio.loadSound("sound/nom.wav"), --https://freesound.org/people/xtrgamr/sounds/253615/
   duckSound = audio.loadSound("sound/quack.wav"), --https://freesound.org/people/crazyduckman/sounds/185549/
   oofSound = audio.loadSound("sound/oof1.mp3"), --http://soundbible.com/free-sound-effects-1.html
-  hurtSound = audio.loadSound("sound/hurt1.wav") --http://soundbible.com/free-sound-effects-1.html
+  hurtSound = audio.loadSound("sound/hurt1.wav"), --http://soundbible.com/free-sound-effects-1.html
+  balloonSound = audio.loadSound("sound/pop.wav")
 }
 
 display.setDefault("background", 0, 0, 0)
@@ -253,6 +254,17 @@ function onCollision(event)
         event.object2 = nil
         audio.play(soundTable["duckSound"])
       elseif
+            event.object1.myName == "Catball" and event.object2.myName == "balloon" or
+            event.object1.myName == "balloon" and event.object2.myName == "Catball"
+            then
+              enemiesDefeated = enemiesDefeated + 1
+              foodEaten = foodEaten + 5
+              cat:setLinearVelocity(CBx + power / 2, CBy - power / 2)
+              event.contact.isEnabled = false
+              event.object2:removeSelf()
+              event.object2 = nil
+              audio.play(soundTable["balloonSound"])
+            elseif
         event.object1.myName == "Catball" and event.object2.myName == "floor" or
         event.object1.myName == "floor" and event.object2.myName == "Catball"
         then
@@ -295,7 +307,7 @@ function onCollision(event)
         shopButton.x = display.contentCenterX
         shopButton.y = 750
         shopButton.alpha = 0
-        shopButtonText = display.newText(uiGroup, "Visit the Shop", display.contentCenterX, 750, native.systemFont, 35)
+        shopButtonText = display.newText(uiGroup, "High Scores", display.contentCenterX, 750, native.systemFont, 35)
         shopButtonText:setFillColor(0, 0, 0)
         shopButtonText.alpha = 0
 
@@ -443,7 +455,7 @@ function onCollision(event)
           physics.addBody(enemy[i], "static", {radius = 50, density = 1, friction = 1, bounce = 2})
           enemy[i].x = 4000 + math.random(display.screenOriginX, display.contentWidth * 200)
           enemy[i].y = -25500 + math.random(display.screenOriginY, display.contentHeight * 10)
-          enemy[i].myName = "enemy"
+          enemy[i].myName = "balloon"
           camera:insert(enemy[i])
         end
 
