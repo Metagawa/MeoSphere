@@ -14,7 +14,7 @@ supported = { "landscapeLeft", "landscapeRight" },
 
 android =
 {
-versionCode=102
+versionCode=103
 },
 
 

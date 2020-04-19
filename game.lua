@@ -186,12 +186,10 @@ local function dasboot(event)
   cat:setLinearVelocity(5000, - 7000)
   audio.play(soundTable["bootSound"])
   dasbootuses = dasbootuses - 1
-      dasbooticon:removeEventListener("tap", dasboot)
   if (dasbootuses < 1) then
     dasbooticon.alpha = 0.5
     dasbootusesText.alpha = 0
-  elseif (dasbootuses > 0) then
-      dasbooticon:addEventListener("tap", dasboot)
+    dasbooticon:removeEventListener("tap", dasboot)
   end
 end
 
@@ -213,8 +211,8 @@ local function tapperCountdown(event)
   Runtime:removeEventListener("tap", rotatecat)
   pauseButton:addEventListener("tap", pauseGame)
   shopButton2:addEventListener("tap", gotoShop)
-  dasbooticon:addEventListener("tap", dasboot)
   catnipicon:addEventListener("tap", catnip)
+  dasbooticon:addEventListener("tap", dasboot)
   gameTimeRemainingTimer = timer.performWithDelay(1000, gameTimeRemaining, secondsGame)
 end
 
@@ -289,14 +287,14 @@ function onCollision(event)
                 event.object2:removeSelf()
                 event.object2 = nil
                 audio.play(soundTable["bootSound"])
-                dasbootuses = dasbootuses + 1
-                dasbooticon.alpha = 1
-                dasbootusesText.alpha = 1
-                if (dasbootuses < 1) then
-                  dasbooticon.alpha = 0.5
-                  dasbootusesText.alpha = 0
-                elseif (dasbootuses > 0) then
-                    dasbooticon:addEventListener("tap", dasboot)
+                if (dasbootuses > 0) then
+                  dasbootuses = dasbootuses + 1
+                elseif (dasbootuses <= 0) then
+                  dasbooticon.alpha = 1
+                  dasbootusesText.alpha = 1
+                  dasbootuses = dasbootuses + 1
+                  dasbooticon:addEventListener("tap", dasboot)
+
                 end
               end
             end
