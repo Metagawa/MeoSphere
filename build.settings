@@ -5,6 +5,19 @@
 
 settings =
 {
+
+orientation =
+{
+default = "landscapeLeft",
+supported = { "landscapeLeft", "landscapeRight" },
+},
+
+android =
+{
+versionCode=102
+},
+
+
 	win32 =
 	{
 			preferenceStorage = "sqlite",

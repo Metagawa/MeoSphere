@@ -190,7 +190,7 @@ local function dasboot(event)
   if (dasbootuses < 1) then
     dasbooticon.alpha = 0.5
     dasbootusesText.alpha = 0
-  elseif (dasbootuses>0) then
+  elseif (dasbootuses > 0) then
       dasbooticon:addEventListener("tap", dasboot)
   end
 end
@@ -292,6 +292,12 @@ function onCollision(event)
                 dasbootuses = dasbootuses + 1
                 dasbooticon.alpha = 1
                 dasbootusesText.alpha = 1
+                if (dasbootuses < 1) then
+                  dasbooticon.alpha = 0.5
+                  dasbootusesText.alpha = 0
+                elseif (dasbootuses > 0) then
+                    dasbooticon:addEventListener("tap", dasboot)
+                end
               end
             end
           end
