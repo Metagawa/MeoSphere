@@ -42,7 +42,7 @@ function scene:create(event)
   shopButton.x = display.contentCenterX
   shopButton.y = 910
   local shopButtonText =
-  display.newText(sceneGroup, "Visit the Shop", display.contentCenterX, 910, native.newFont "Emulogic.ttf", 20)
+  display.newText(sceneGroup, "High Scores", display.contentCenterX, 910, native.newFont "Emulogic.ttf", 20)
   shopButtonText:setFillColor(1, 1, 1)
 
   gameButton:addEventListener("tap", gotoGame)
