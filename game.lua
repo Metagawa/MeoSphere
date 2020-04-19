@@ -73,14 +73,15 @@ end
 
 --function to go to main menu
 local function gotoMenu()
-  composer.gotoScene("menu")
+  composer.gotoScene("menu", {time = 800, effect = "fromLeft"})
 end
 
 --function to go to shop
 local function gotoShop()
   carriedScore = carriedScore + totalScore
   composer.setVariable("finalScore", totalScore)
-  composer.gotoScene("shop")
+  composer.gotoScene("shop", {time = 800, effect = "slideDown"})
+
 end
 
 --function to reset the game
@@ -93,7 +94,8 @@ local function endGame()
   carriedScore = carriedScore + totalScore
   composer.setVariable("finalScore", totalScore)
   physics.stop()
-  composer.gotoScene("shop")
+  composer.gotoScene("shop", {time = 800, effect = "slideDown"})
+
   timer.cancel(endGameTimer)
 end
 
@@ -278,7 +280,7 @@ function onCollision(event)
               event.contact.isEnabled = false
               cat:setLinearVelocity(0, 0)
               audio.play(soundTable["hurtSound"])
-              timer.performWithDelay(300, gotoShop, 1)
+              timer.performWithDelay(300, gotoShop, 1, {time = 800, effect = "crossFade"})
             elseif
               event.object1.myName == "Catball" and event.object2.myName == "boot" or
               event.object1.myName == "boot" and event.object2.myName == "Catball"

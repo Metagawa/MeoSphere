@@ -14,7 +14,7 @@ local function gotoGame()
 end
 
 local function gotoShop()
-  composer.gotoScene("shop")
+  composer.gotoScene("shop", {time = 800, effect = "slideDown"})
 end
 
 -- -----------------------------------------------------------------------------------
