@@ -51,12 +51,12 @@ display.setDefault("background", 0, 0, 0)
 display.setDefault("textureWrapX", "repeat")
 display.setDefault("textureWrapY", "repeat")
 
-  --Camera declarations (sky background)
-  local x, y = display.contentCenterX, display.contentCenterY
-  local cam = display.newRect(x, y, 4999999, 4999999)
-  cam.fill = {type = "image", filename = "images/sky.png"}
-  cam.fill.scaleX = 0.0007
-  cam.fill.scaleY = 0.0007
+--Camera declarations (sky background)
+local x, y = display.contentCenterX, display.contentCenterY
+local cam = display.newRect(x, y, 4999999, 4999999)
+cam.fill = {type = "image", filename = "images/sky.png"}
+cam.fill.scaleX = 0.0007
+cam.fill.scaleY = 0.0007
 
 --Timer Upgrade conditions
 if (upgrade9 == true) then
@@ -214,6 +214,7 @@ local function tapperCountdown(event)
   physics.start()
   Runtime:removeEventListener("tap", rotatecat)
   pauseButton:addEventListener("tap", pauseGame)
+  shopButton2:addEventListener("tap", gotoShop)
   dasbooticon:addEventListener("tap", dasboot)
   catnipicon:addEventListener("tap", catnip)
   gameTimeRemainingTimer = timer.performWithDelay(1000, gameTimeRemaining, secondsGame)
@@ -327,6 +328,11 @@ function onCollision(event)
           pauseButton.x = display.contentCenterX + 800
           pauseButton.y = 50
           pauseButton.alpha = 1
+
+          shopButton2 = display.newImageRect(uiGroup, "images/Restart.png", 75, 75)
+          shopButton2.x = display.contentCenterX + 725
+          shopButton2.y = 50
+          shopButton2.alpha = 1
 
           resumeButton = display.newImageRect(uiGroup, "images/play.png", 75, 75)
           resumeButton.x = display.contentCenterX + 800
